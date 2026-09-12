@@ -1,0 +1,170 @@
+// =========================================================================
+// Composer
+// =========================================================================
+//
+// The composer is the one part of Discourse it is least acceptable to break,
+// so this file is conservative by design. It changes surface, border and
+// focus only. Layout, drag-to-resize, draft handling, uploads, fullscreen,
+// the preview pane and the mobile composer are all left to core.
+#reply-control {
+  background: var(--rc-surface-raised);
+  border-block-start: 1px solid var(--rc-border);
+  box-shadow: var(--shadow-composer);
+
+  // The composer's top edge is the boundary between reading and writing.
+  // A crimson hairline is a quiet way to make the mode switch obvious.
+  &.open {
+    border-block-start-color: var(--rc-accent);
+  }
+
+  .grippie {
+    background: transparent;
+
+    &::before {
+      background: var(--rc-border-strong);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Title, category and tag row
+// -------------------------------------------------------------------------
+#reply-control {
+  .composer-fields {
+    border-block-end: 1px solid var(--rc-border-subtle);
+
+    #reply-title,
+    .title-input input {
+      font-size: var(--font-up-2);
+      font-weight: 600;
+    }
+  }
+
+  // Keep the category and tag choosers from collapsing on narrow screens —
+  // they wrap onto their own line rather than being squeezed or hidden.
+  .category-input,
+  .tags-input,
+  .mini-tag-chooser {
+    min-width: 0;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Editor
+// -------------------------------------------------------------------------
+.d-editor-textarea-wrapper {
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+  transition: border-color var(--rc-transition);
+
+  &:focus-within {
+    border-color: var(--tertiary);
+  }
+}
+
+.d-editor-input,
+.d-editor-preview-wrapper {
+  font-size: var(--font-0);
+  line-height: 1.65;
+}
+
+.d-editor-input {
+  background: transparent;
+  border: 0;
+
+  // Writing a long build log is a monospace-adjacent activity for some
+  // people and prose for others, so the site font is respected here and the
+  // textarea simply inherits it.
+  color: var(--rc-text);
+
+  &:focus {
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Toolbar
+// -------------------------------------------------------------------------
+.d-editor-button-bar {
+  border-block-end: 1px solid var(--rc-border-subtle);
+
+  .btn {
+    color: var(--rc-text-muted);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--rc-hover);
+      color: var(--rc-text);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Preview
+// -------------------------------------------------------------------------
+//
+// The preview must look like the finished post, so it inherits the same
+// typography and code rules via .d-editor-preview elsewhere in the theme.
+.d-editor-preview-wrapper {
+  background: var(--rc-surface-sunken);
+  border-radius: var(--rc-radius-sm);
+
+  // Marker that this is a preview rather than the live post.
+  &::before {
+    color: var(--rc-text-faint);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Uploads
+// -------------------------------------------------------------------------
+.composer-popup,
+.composer-messages {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius-sm);
+  box-shadow: var(--shadow-dropdown);
+}
+
+// Drag-and-drop target for schematics, CAD screenshots and log files.
+#reply-control.composer-drag-drop-target,
+.composer-drag-drop-target {
+  outline: 2px dashed var(--tertiary);
+  outline-offset: -4px;
+}
+
+.upload-progress-bar,
+progress {
+  accent-color: var(--tertiary);
+}
+
+// -------------------------------------------------------------------------
+// Submit row
+// -------------------------------------------------------------------------
+#reply-control .submit-panel {
+  .save-or-cancel {
+    align-items: center;
+    gap: var(--rc-space-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Mobile
+// -------------------------------------------------------------------------
+//
+// On phones the composer takes the full viewport. Nothing is hidden; the
+// toolbar scrolls horizontally rather than dropping buttons.
+
+@include rc-until(md) {
+  .d-editor-button-bar {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  #reply-control .composer-fields #reply-title {
+    font-size: var(--font-up-1);
+  }
+}

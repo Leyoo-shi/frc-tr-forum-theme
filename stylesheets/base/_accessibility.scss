@@ -1,0 +1,121 @@
+// =========================================================================
+// Accessibility
+// =========================================================================
+//
+// Treated as a requirement, not a polish pass. The rules here are global
+// and deliberately hard to accidentally override elsewhere in the theme.
+
+// -------------------------------------------------------------------------
+// Focus
+// -------------------------------------------------------------------------
+//
+// A single visible focus treatment for everything the keyboard can reach.
+// `:focus-visible` means pointer users do not see rings on click while
+// keyboard users always do.
+//
+// Discourse core already ships a focus system; this aligns it with the
+// theme's accent rather than replacing it, and never removes an outline
+// without providing one.
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  @include rc-focus-ring;
+}
+
+// Inputs get a tighter offset so the ring does not collide with adjacent
+// form controls in dense rows like the composer's title/category/tag strip.
+:where(input, select, textarea):focus-visible {
+  outline-offset: 1px;
+}
+
+// -------------------------------------------------------------------------
+// Motion
+// -------------------------------------------------------------------------
+//
+// Every transition in this theme is expressed through --rc-transition, so
+// neutralising the token here disables theme motion wholesale. Core's own
+// animations are also reduced, but scroll behaviour is left to the browser.
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rc-transition: 0s;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Contrast
+// -------------------------------------------------------------------------
+//
+// Under a forced/high-contrast preference, borders that were intentionally
+// faint become genuine boundaries.
+
+@media (prefers-contrast: more) {
+  :root {
+    --rc-border-subtle: var(--rc-border);
+    --rc-border: var(--rc-border-strong);
+    --rc-text-muted: var(--rc-text-secondary);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Touch targets
+// -------------------------------------------------------------------------
+//
+// On coarse pointers, controls that are visually small still need a
+// comfortable hit area. Applied via a pseudo-element so the visual size of
+// dense toolbars (post controls, composer toolbar) is unchanged.
+
+@media (pointer: coarse) {
+  .topic-list .topic-list-data > a,
+  .post-controls .btn,
+  .d-editor-button-bar .btn,
+  .nav-pills > li > a {
+    @include rc-tap-target;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Never hover-only
+// -------------------------------------------------------------------------
+//
+// Discourse reveals some row and post controls on hover. Where the theme
+// touches those, it must keep them reachable by keyboard. This guarantees
+// anything hidden by a theme rule reappears on focus.
+.topic-list-item:focus-within,
+.topic-post:focus-within {
+  .rc-hover-only {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Screen-reader helper
+// -------------------------------------------------------------------------
+//
+// Core ships .sr-only; this only guarantees a skip-link style target stays
+// visible once focused, which some themes accidentally break.
+.skip-link:focus,
+a.skip-link:focus-visible {
+  position: fixed;
+  inset-block-start: var(--rc-space-2);
+  inset-inline-start: var(--rc-space-2);
+  z-index: 9999;
+  padding: var(--rc-space-2) var(--rc-space-3);
+  background: var(--rc-surface-raised);
+  border-radius: var(--rc-radius);
+  box-shadow: var(--rc-shadow-md);
+  width: auto;
+  height: auto;
+
+  // `clip-path` only; the legacy `clip` property is deprecated and core's
+  // own sr-only helper already uses clip-path.
+  clip-path: none;
+}

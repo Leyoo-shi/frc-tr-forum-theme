@@ -1,0 +1,48 @@
+// =========================================================================
+// Root / canvas
+// =========================================================================
+html {
+  background: var(--rc-page);
+}
+
+body {
+  background: var(--rc-page);
+  color: var(--rc-text);
+
+  // The site's configured Discourse font is respected: core already sets
+  // `font-family: var(--font-family)` on body from the admin font setting.
+  // The theme deliberately does not declare a font stack of its own and
+  // ships no webfonts, so there is no remote font dependency.
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Long unbroken tokens are everywhere in robotics threads: part numbers,
+// CAN IDs, encoder counts, stack traces, raw URLs. Allowing them to break
+// prevents horizontal overflow on narrow screens.
+.cooked,
+.topic-title,
+.d-editor-preview {
+  @include rc-wrap-anywhere;
+}
+
+// Discourse renders uploads, oneboxes and lightboxes inside .cooked. Keeping
+// images fluid here means CAD screenshots and robot photos scale down on
+// mobile instead of forcing the post to scroll sideways. The lightbox's own
+// behaviour is untouched.
+.cooked img:not(.emoji, .avatar),
+.d-editor-preview img:not(.emoji, .avatar) {
+  max-width: 100%;
+  height: auto;
+}
+
+::selection {
+  background: var(--rc-selected);
+  color: var(--rc-text);
+}
+
+// A single, consistent scrollbar treatment. `scrollbar-color` is ignored by
+// browsers that do not support it, which is a clean degradation.
+* {
+  scrollbar-color: var(--rc-border-strong) transparent;
+}

@@ -1,0 +1,232 @@
+// =========================================================================
+// Code, tables and embedded technical content
+// =========================================================================
+//
+// This community will post a great deal of code — robot subsystem classes,
+// PID tuning snippets, CAN configuration, build errors, vendordep JSON — so
+// code has to be excellent in both schemes, not merely acceptable.
+//
+// Syntax colours come from core's `--hljs-*` custom properties, which are
+// derived per colour palette. The theme sets the *container* (surface,
+// border, rhythm, scrolling) and leaves token colours to core, so
+// highlighting stays correct under any palette an administrator selects.
+
+// -------------------------------------------------------------------------
+// Inline code
+// -------------------------------------------------------------------------
+//
+// Sized at 0.9em rather than a fixed step so it tracks the surrounding text,
+// including inside headings and list items.
+:not(pre) > code {
+  background: var(--inline-code-bg);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+
+  // Long identifiers and paths must not force the post to scroll sideways.
+  @include rc-wrap-anywhere;
+}
+
+// Inside a link, code should not fight the link colour.
+a > code {
+  color: inherit;
+}
+
+// -------------------------------------------------------------------------
+// Code blocks
+// -------------------------------------------------------------------------
+.cooked pre,
+.d-editor-preview pre {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+  margin-block: var(--rc-space-4);
+  padding: var(--rc-space-3) var(--rc-space-4);
+
+  // Code scrolls horizontally inside its own box. It must never wrap —
+  // wrapped code is misleading — and must never widen the post.
+  max-width: 100%;
+  overflow-x: auto;
+
+  code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: var(--font-down-1);
+    line-height: 1.55;
+    white-space: pre;
+    overflow-wrap: normal;
+    word-break: normal;
+
+    // Tabs at 8 columns waste the measure for indented robot code.
+    tab-size: 2;
+  }
+
+  // Core's highlighted blocks bring their own background token; keep the
+  // theme's surface so every block matches regardless of highlight state.
+  &.hljs,
+  code.hljs {
+    background: transparent;
+  }
+}
+
+// The copy-code button core overlays on blocks.
+.cooked .codeblock-button-wrapper,
+.d-editor-preview .codeblock-button-wrapper {
+  .copy-cmd,
+  .fullscreen-cmd {
+    background: var(--rc-surface-raised);
+    border: 1px solid var(--rc-border);
+    border-radius: var(--rc-radius-sm);
+    color: var(--rc-text-muted);
+
+    &:hover {
+      color: var(--rc-text);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Tables
+// -------------------------------------------------------------------------
+//
+// BOMs, gear ratios, motor comparisons and test matrices are posted as
+// markdown tables constantly. They need to be readable and, on a phone,
+// scrollable rather than crushed.
+.cooked table,
+.d-editor-preview table {
+  border-collapse: collapse;
+  font-size: var(--font-down-1);
+  margin-block: var(--rc-space-4);
+  width: auto;
+
+  th,
+  td {
+    border: 1px solid var(--rc-border-subtle);
+    padding: var(--rc-space-2) var(--rc-space-3);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--rc-surface-sunken);
+    color: var(--rc-text);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  // Zebra striping earns its place on a 40-row BOM.
+  tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--primary) 3%, transparent);
+  }
+
+  // Numeric columns line up when the content is numeric.
+  td {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// Core wraps wide tables in a scrolling container; make sure the affordance
+// is visible and the page itself never scrolls sideways.
+.cooked .md-table,
+.d-editor-preview .md-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+// -------------------------------------------------------------------------
+// Oneboxes
+// -------------------------------------------------------------------------
+//
+// GitHub repositories, documentation links, datasheets and CAD hosts are all
+// rendered as oneboxes. They should read as a referenced artefact — a quiet
+// bordered surface — rather than as an advertisement.
+.cooked aside.onebox,
+.d-editor-preview aside.onebox {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-inline-start: 3px solid var(--rc-border-strong);
+  border-radius: 0 var(--rc-radius-sm) var(--rc-radius-sm) 0;
+  padding: var(--rc-space-3) var(--rc-space-4);
+
+  header {
+    margin-block-end: var(--rc-space-1);
+
+    a[href] {
+      color: var(--rc-text-muted);
+      font-size: var(--font-down-1);
+      font-weight: 500;
+    }
+
+    img.site-icon {
+      margin-inline-end: var(--rc-space-1);
+    }
+  }
+
+  .onebox-body {
+    h3,
+    h4 {
+      font-size: var(--font-0);
+      margin-block: 0 var(--rc-space-1);
+    }
+
+    p {
+      color: var(--rc-text-muted);
+      font-size: var(--font-down-1);
+      margin-block-end: 0;
+    }
+
+    // Thumbnails stay modest so a link preview never outweighs the post.
+    img.thumbnail {
+      border-radius: var(--rc-radius-sm);
+      max-height: 12rem;
+      width: auto;
+    }
+  }
+
+  // GitHub oneboxes render a file/commit body that is effectively code.
+  .github-row,
+  .github-content,
+  .onebox-body pre {
+    font-size: var(--font-down-1);
+  }
+}
+
+// Inline "small" oneboxes — a single-line link with a favicon.
+.cooked .onebox-result,
+.cooked a.inline-onebox {
+  color: var(--d-link-color);
+}
+
+// -------------------------------------------------------------------------
+// Keyboard keys
+// -------------------------------------------------------------------------
+.cooked kbd,
+.d-editor-preview kbd {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-block-end-width: 2px;
+  border-radius: var(--rc-radius-sm);
+  font-size: 0.85em;
+  padding: 0.1em 0.4em;
+  white-space: nowrap;
+}
+
+// -------------------------------------------------------------------------
+// Mathematical and technical notation
+// -------------------------------------------------------------------------
+//
+// Rendered by the discourse-math plugin when installed. Only spacing and
+// overflow are handled here; the plugin owns the rendering. If the plugin is
+// absent these selectors never match.
+.cooked .math,
+.cooked mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.cooked mjx-container[display="true"] {
+  margin-block: var(--rc-space-4);
+}

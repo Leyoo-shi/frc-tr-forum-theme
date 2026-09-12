@@ -1,0 +1,136 @@
+// =========================================================================
+// Mixins
+// =========================================================================
+//
+// `lib/viewport` is core's current breakpoint module and it refuses to be
+// `@import`ed (its .import.scss shim raises). It is therefore `@use`d once,
+// here, and re-exposed through thin wrappers so the rest of the theme — all
+// of which is `@import`ed — has a single, consistent way to write media
+// queries.
+//
+// Core's breakpoint scale: xs 20rem, sm 40rem, md 48rem, lg 64rem,
+// xl 80rem, 2xl 96rem.
+
+@use "lib/viewport";
+
+// -------------------------------------------------------------------------
+// Theme settings
+// -------------------------------------------------------------------------
+
+/// Test whether a boolean theme setting is enabled.
+///
+/// This MUST be used instead of `@if $setting`. Discourse emits every
+/// setting as `$name: unquote("...")`, so a disabled boolean arrives as the
+/// unquoted *string* `false` — which is truthy in Sass. Writing
+/// `@if $some_bool` therefore always takes the enabled branch, silently.
+/// Comparing the interpolated string is the only correct test.
+@function rc-on($setting) {
+  @return "#{$setting}" == "true";
+}
+
+/// Apply from this breakpoint upwards.
+@mixin rc-from($bp) {
+  @include viewport.from($bp) {
+    @content;
+  }
+}
+
+/// Apply below this breakpoint.
+@mixin rc-until($bp) {
+  @include viewport.until($bp) {
+    @content;
+  }
+}
+
+/// Apply between two breakpoints.
+@mixin rc-between($from, $until) {
+  @include viewport.between($from, $until) {
+    @content;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Focus
+// -------------------------------------------------------------------------
+
+/// A consistent, always-visible focus ring.
+///
+/// Uses `:focus-visible` so pointer users do not see rings on click, while
+/// keyboard users always do. `outline-offset` keeps the ring clear of the
+/// element's own border. Never remove the outline without calling this.
+@mixin rc-focus-ring($offset: 2px) {
+  outline: 2px solid var(--tertiary);
+  outline-offset: $offset;
+}
+
+// -------------------------------------------------------------------------
+// Text
+// -------------------------------------------------------------------------
+
+/// Single-line truncation with an ellipsis.
+///
+/// `min-width: 0` is included because these elements are almost always flex
+/// or grid children, where the default `min-width: auto` would otherwise
+/// stop them shrinking and let a long title push the row's metadata out of
+/// view. Turkish topic titles are frequently long, so this matters.
+@mixin rc-truncate {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Multi-line clamp. Used for excerpts and category descriptions.
+@mixin rc-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/// Long unbroken strings — URLs, part numbers, CAN IDs, stack traces — are
+/// common in robotics threads and will otherwise force horizontal scrolling.
+@mixin rc-wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+// -------------------------------------------------------------------------
+// Surfaces
+// -------------------------------------------------------------------------
+
+/// A genuinely elevated surface: menus, modals, cards, popovers.
+@mixin rc-surface($radius: var(--rc-radius)) {
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: $radius;
+}
+
+/// A hairline separator. Used instead of shadows for row separation, which
+/// is what keeps topic lists dense rather than card-like.
+@mixin rc-hairline($side: bottom) {
+  border-#{$side}: 1px solid var(--rc-border-subtle);
+}
+
+// -------------------------------------------------------------------------
+// Touch targets
+// -------------------------------------------------------------------------
+
+/// Guarantees a comfortable tap target without changing visual size.
+///
+/// Uses a pseudo-element rather than padding so the control's appearance is
+/// untouched — important for icon-only buttons in dense toolbars.
+@mixin rc-tap-target($size: 44px) {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    min-width: $size;
+    min-height: $size;
+  }
+}

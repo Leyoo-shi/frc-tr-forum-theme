@@ -1,0 +1,29 @@
+en:
+  community_footer:
+    founded_by: "Founded by"
+
+  theme_metadata:
+    description: "An information-dense, accessible theme for technical robotics communities. Calm neutral surfaces, a restrained crimson accent, and topic lists built for fast scanning."
+    settings:
+      community_tagline:
+        description: "A single line describing this community, shown above the topic list on the homepage. Leave empty to show nothing. Write it in your community's own language."
+      show_community_tagline:
+        description: "Show the community tagline on the homepage. Has no effect while the tagline is empty."
+      footer_organization_text:
+        description: "Name of the organisation that founded this community, shown as a small attribution in the footer. Leave empty to hide the attribution entirely."
+      footer_organization_url:
+        description: "Optional link for the founding organisation's name. Only http:// and https:// addresses are linked."
+      content_max_width:
+        description: "Maximum width of the forum layout, in pixels. Wider values use more of a large monitor for topic lists; this does not affect the width of post text."
+      reading_max_width:
+        description: "Maximum width of post text, in pixels. Kept narrower than the layout so long technical posts stay comfortable to read. Around 700–800 is a good measure for most fonts."
+      topic_list_density:
+        description: "Row spacing in topic lists. 'compact' fits more discussions on screen and is recommended for busy forums; 'comfortable' adds breathing room."
+      show_topic_excerpts:
+        description: "Show a two-line preview of the first post in topic lists. Off by default because excerpts roughly double the height of every row."
+      compact_category_page:
+        description: "Tighten the categories page for communities with many categories. Descriptions are shortened to one line; nothing is removed."
+      interface_corner_radius:
+        description: "Corner rounding across the interface, in pixels. 0 gives square corners; 6 is the default; higher values feel softer."
+      header_translucency:
+        description: "Give the header a subtle translucent blur as content scrolls beneath it. Automatically disabled on small screens and when the reader prefers reduced transparency."

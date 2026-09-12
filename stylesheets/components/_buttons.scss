@@ -1,0 +1,121 @@
+// =========================================================================
+// Buttons
+// =========================================================================
+//
+// One primary treatment, one secondary, and danger kept unmistakably
+// dangerous. Discourse relies on `.btn-primary` / `.btn-default` /
+// `.btn-danger` semantics throughout, so those classes are styled rather
+// than replaced.
+//
+// Note on colour: primary buttons use `--tertiary`, not the crimson accent.
+// If every call to action were red the interface would read as a series of
+// warnings, and genuine danger actions would lose their meaning.
+.btn {
+  border-radius: var(--rc-radius-sm);
+  font-weight: 500;
+  transition:
+    background-color var(--rc-transition),
+    border-color var(--rc-transition),
+    color var(--rc-transition);
+
+  &:focus-visible {
+    @include rc-focus-ring;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Primary
+// -------------------------------------------------------------------------
+.btn-primary {
+  background: var(--tertiary);
+  color: var(--secondary);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--tertiary-hover);
+    color: var(--secondary);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Secondary / default
+// -------------------------------------------------------------------------
+//
+// Bordered rather than filled, so it reads as available without competing
+// with the primary action next to it.
+.btn-default {
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border);
+  color: var(--rc-text);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--rc-hover);
+    border-color: var(--rc-border-strong);
+    color: var(--rc-text);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Flat / transparent
+// -------------------------------------------------------------------------
+.btn-flat,
+.btn-transparent {
+  color: var(--rc-text-muted);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--rc-hover);
+    color: var(--rc-text);
+  }
+
+  .d-icon {
+    color: inherit;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Danger
+// -------------------------------------------------------------------------
+//
+// Deliberately the loudest thing in the interface. Deleting a post or
+// suspending a member must never look like an ordinary action.
+.btn-danger {
+  background: var(--danger);
+  color: var(--secondary);
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: var(--danger-hover);
+    color: var(--secondary);
+  }
+
+  &:focus-visible {
+    outline-color: var(--danger);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Disabled
+// -------------------------------------------------------------------------
+//
+// Reduced contrast plus a not-allowed cursor. Opacity alone can push text
+// below the contrast floor, so the colours are set explicitly.
+.btn:disabled,
+.btn.disabled {
+  background: var(--rc-surface-sunken);
+  border-color: var(--rc-border-subtle);
+  color: var(--rc-text-faint);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+// -------------------------------------------------------------------------
+// Create Topic
+// -------------------------------------------------------------------------
+//
+// The most important action on a community forum. It keeps the primary
+// treatment and simply gets a little more presence.
+#create-topic {
+  font-weight: 600;
+}

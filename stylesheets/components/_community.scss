@@ -1,0 +1,73 @@
+// =========================================================================
+// Community identity
+// =========================================================================
+//
+// Styles for the two elements this theme renders itself. Both are optional
+// and both are quiet by design.
+//
+// The branding balance this theme aims for is roughly 90% universal robotics
+// community, 10% Ro6one heritage. That means: no large logos, no team
+// slogans, no mascot, no team number as a motif, and crimson used as an
+// accent rather than a background.
+
+// -------------------------------------------------------------------------
+// Community tagline
+// -------------------------------------------------------------------------
+//
+// One line above the homepage topic list. Sized as body text, not as a hero
+// headline — it introduces the community without occupying the screen a
+// visitor came to read.
+.rc-community-tagline {
+  color: var(--rc-text-muted);
+  font-size: var(--font-0);
+  line-height: 1.5;
+  margin-block: 0 var(--rc-space-4);
+  max-width: 68ch;
+
+  // The one structural nod to the founding organisation: a short crimson
+  // rule. Subtle enough to read as punctuation rather than as branding.
+  border-inline-start: 2px solid var(--rc-accent);
+  padding-inline-start: var(--rc-space-3);
+}
+
+// -------------------------------------------------------------------------
+// Footer attribution
+// -------------------------------------------------------------------------
+.rc-community-footer {
+  color: var(--rc-text-faint);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  font-size: var(--font-down-1);
+  justify-content: center;
+  padding-block: var(--rc-space-4);
+  text-align: center;
+
+  &__link {
+    color: var(--rc-text-muted);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentcolor 35%, transparent);
+    text-underline-offset: 0.2em;
+
+    &:hover {
+      color: var(--rc-text);
+      text-decoration-color: currentcolor;
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring;
+      border-radius: 2px;
+    }
+  }
+
+  &__org {
+    color: var(--rc-text-muted);
+  }
+}
+
+@include rc-until(sm) {
+  .rc-community-tagline {
+    font-size: var(--font-down-1);
+  }
+}

@@ -1,0 +1,300 @@
+// =========================================================================
+// Topic list
+// =========================================================================
+//
+// The most important surface in the theme. The goal is a list a working
+// engineer can scan quickly: the title dominates, category and tags are
+// identifiable but clearly secondary, and the counts line up so they can be
+// compared down the column.
+//
+// Three things this file deliberately does NOT do:
+//
+//   - It does not turn rows into cards. Rows share one background and are
+//     separated by hairlines. Cards cost vertical space and slow scanning.
+//   - It does not assume which columns are enabled. Columns are supplied
+//     dynamically by core (and by plugins via the column API), so every rule
+//     here is written against a cell's own class, never against
+//     `td:nth-child(n)`.
+//   - It does not restyle topic states by hand. Pinned/closed/archived/
+//     unread/new/hot/solved all keep core's markup and indicators; the theme
+//     only makes sure they stay legible.
+.topic-list {
+  background: transparent;
+
+  // Row separation is a hairline on the row, not a border on each cell.
+  // Using the row avoids double borders where a column is missing.
+  .topic-list-item {
+    @include rc-hairline;
+    transition: background-color var(--rc-transition);
+
+    // Extremely subtle. Enough to confirm which row the cursor is on while
+    // scanning; not enough to read as a selection.
+    &:hover {
+      background: var(--rc-hover);
+    }
+
+    // Keyboard navigation (the `j`/`k` shortcuts and tabbing) must be at
+    // least as visible as hover.
+    &:focus-within {
+      background: var(--rc-hover);
+    }
+  }
+
+  // Core marks the last-viewed topic when returning from a topic. Keep it
+  // obviously distinct from hover.
+  .topic-list-item[data-is-last-viewed-topic] {
+    background: var(--rc-selected);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Header row
+// -------------------------------------------------------------------------
+.topic-list-header {
+  th {
+    border-block-end: 1px solid var(--rc-border);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .sortable {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--rc-text);
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring(-2px);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Title
+// -------------------------------------------------------------------------
+.topic-list .main-link {
+  .link-top-line {
+    // `align-items: baseline` keeps the status icons (pinned, locked,
+    // solved) sitting on the title's baseline rather than floating.
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 var(--rc-space-2);
+    line-height: 1.35;
+  }
+
+  .title {
+    color: var(--rc-text);
+    font-weight: 500;
+
+    // Titles wrap rather than truncate. Turkish topic titles are frequently
+    // long, and a truncated title in a technical archive is worse than a
+    // two-line row — the words at the end are often the specific ones
+    // ("... CAN bus hatası", "... swerve modül kalibrasyonu").
+    @include rc-wrap-anywhere;
+
+    &:hover {
+      color: var(--d-link-color);
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring(2px);
+      border-radius: 2px;
+    }
+  }
+}
+
+// Unread and unseen topics get weight, not colour, so the distinction
+// survives greyscale and low-vision use. Core's own dot/badge indicators are
+// left in place alongside. `--title-color--read` is core's own token for an
+// already-read title.
+.topic-list .topic-list-item.visited .main-link .title {
+  color: var(--title-color--read);
+  font-weight: 400;
+}
+
+.topic-list-item.unseen-topic .main-link .title,
+.topic-list-item.unread-posts .main-link .title {
+  font-weight: 600;
+}
+
+// -------------------------------------------------------------------------
+// Bottom line: category, tags, participant groups
+// -------------------------------------------------------------------------
+.topic-list .link-bottom-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--rc-space-1) var(--rc-space-2);
+  margin-block-start: var(--rc-space-1);
+  font-size: var(--font-down-2);
+  line-height: 1.4;
+
+  // Many tags must never break the row. They wrap within this line and the
+  // row simply grows; the title above is unaffected.
+  .discourse-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--rc-space-1);
+    min-width: 0;
+  }
+
+  a {
+    color: var(--rc-text-muted);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Excerpts
+// -------------------------------------------------------------------------
+//
+// Off by default (`show_topic_excerpts`), because excerpts roughly double
+// row height and density is the priority. When an administrator turns them
+// on, they are clamped so one long first post cannot dominate the list.
+.topic-list .topic-excerpt {
+  @include rc-clamp(2);
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-1);
+  line-height: 1.5;
+  margin-block-start: var(--rc-space-1);
+}
+
+// -------------------------------------------------------------------------
+// Statistics columns
+// -------------------------------------------------------------------------
+//
+// Replies, views and likes are meant to be compared vertically, so they are
+// tabular, centred and identical in treatment.
+.topic-list {
+  .num,
+  .posts,
+  .views,
+  .likes {
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .num.activity {
+    text-align: end;
+
+    .age {
+      color: var(--rc-text-muted);
+    }
+  }
+
+  // Core shades the reply count by activity ("likes heat"). That is real
+  // signal in a busy list, so it is preserved rather than flattened.
+  .posts-map {
+    .badge-posts {
+      font-weight: 600;
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Posters
+// -------------------------------------------------------------------------
+//
+// Avatars are optional in Discourse configuration, so nothing here assumes
+// they exist — this only tightens them when they do.
+.topic-list .posters {
+  a {
+    border-radius: 50%;
+  }
+
+  img.avatar {
+    border-radius: 50%;
+  }
+
+  .posters-more-count {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-2);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Bulk select
+// -------------------------------------------------------------------------
+.topic-list .bulk-select {
+  .btn-transparent {
+    color: var(--rc-text-muted);
+
+    &:hover {
+      color: var(--rc-text);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Mobile layout
+// -------------------------------------------------------------------------
+//
+// Core switches to a single-cell row on narrow viewports. The features are
+// not hidden — they are rearranged: the title keeps the top line, and
+// category, tags and activity share a metadata line beneath it.
+
+@include rc-until(md) {
+  .topic-list .topic-list-item {
+    .topic-item-metadata {
+      min-width: 0;
+    }
+
+    .main-link {
+      margin-block-end: var(--rc-space-1);
+    }
+
+    .topic-item-stats {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--rc-space-2);
+
+      &__category-tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--rc-space-1);
+        min-width: 0;
+      }
+
+      .num.activity {
+        flex: 0 0 auto;
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Wide screens
+// -------------------------------------------------------------------------
+//
+// With more room available, give the statistics columns a little more space
+// so the numbers do not crowd the title.
+
+@include rc-from(xl) {
+  :root {
+    --d-topic-list-likes-views-posts-width: 5em;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Pinned / closed / archived
+// -------------------------------------------------------------------------
+//
+// Core supplies the icons and the semantics. The theme's only job is to stop
+// them being washed out by the muted metadata colour.
+.topic-list .topic-statuses {
+  .d-icon {
+    color: var(--rc-text-muted);
+  }
+
+  .topic-status.pinned .d-icon,
+  .d-icon-thumbtack {
+    color: var(--rc-accent);
+  }
+}

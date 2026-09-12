@@ -1,0 +1,89 @@
+// =========================================================================
+// Modals
+// =========================================================================
+//
+// Discourse renders modals in a native <dialog>. Core's focus trapping,
+// Escape handling and scroll locking are untouched.
+.modal.d-modal {
+  .d-modal__container {
+    background: var(--rc-surface-raised);
+    border: 1px solid var(--rc-border);
+    border-radius: var(--rc-radius-lg);
+    box-shadow: var(--shadow-modal);
+  }
+
+  .d-modal__header {
+    border-block-end: 1px solid var(--rc-border-subtle);
+
+    .d-modal__title-text {
+      font-size: var(--font-up-1);
+      font-weight: 600;
+    }
+  }
+
+  .d-modal__footer {
+    border-block-start: 1px solid var(--rc-border-subtle);
+    gap: var(--rc-space-2);
+  }
+
+  .d-modal__close {
+    color: var(--rc-text-muted);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--rc-hover);
+      color: var(--rc-text);
+    }
+  }
+}
+
+// The backdrop. Dark enough to focus attention, not so dark that the page
+// behind disappears entirely.
+.modal-backdrop,
+.d-modal::backdrop {
+  background: rgb(0, 0, 0, 0.5);
+}
+
+// -------------------------------------------------------------------------
+// Tabs
+// -------------------------------------------------------------------------
+.d-modal .nav-pills,
+.modal-tabs {
+  border-block-end: 1px solid var(--rc-border-subtle);
+}
+
+// -------------------------------------------------------------------------
+// Toasts
+// -------------------------------------------------------------------------
+.fk-d-default-toast,
+.d-toast {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius);
+  box-shadow: var(--shadow-card);
+
+  &.-success {
+    border-inline-start: 3px solid var(--success);
+  }
+
+  &.-error {
+    border-inline-start: 3px solid var(--danger);
+  }
+
+  &.-info {
+    border-inline-start: 3px solid var(--tertiary);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Small screens
+// -------------------------------------------------------------------------
+//
+// Modals go near-full-width with a safe inset rather than being clipped.
+
+@include rc-until(sm) {
+  .modal.d-modal .d-modal__container {
+    border-radius: var(--rc-radius);
+    max-width: calc(100vw - var(--rc-space-4));
+  }
+}

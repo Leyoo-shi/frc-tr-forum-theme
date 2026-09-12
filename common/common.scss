@@ -1,0 +1,39 @@
+// =========================================================================
+// Ro6one Community — stylesheet entry point
+// =========================================================================
+//
+// Discourse auto-loads this file and adds the theme's `stylesheets/`
+// directory to the Sass load path, so every partial below is imported
+// relative to `stylesheets/`.
+//
+// `@import` (not `@use`) is deliberate: Discourse prepends
+// `common/foundation/variables` and `common/foundation/mixins` to this
+// entrypoint at compile time, and those globals are only visible to
+// `@import`ed partials.
+//
+// Order matters — tokens and mixins must come first.
+
+@import "abstracts/tokens";
+@import "abstracts/mixins";
+@import "base/root";
+@import "base/core-variables";
+@import "base/typography";
+@import "base/accessibility";
+@import "layout/header";
+@import "layout/sidebar";
+@import "layout/main";
+@import "pages/topic-list";
+@import "pages/categories";
+@import "pages/topic";
+@import "pages/profile";
+@import "components/buttons";
+@import "components/forms";
+@import "components/tags";
+@import "components/badges";
+@import "components/menus";
+@import "components/modals";
+@import "components/composer";
+@import "components/search";
+@import "components/code";
+@import "components/community";
+@import "utilities/responsive";

@@ -1,0 +1,118 @@
+// =========================================================================
+// Core variable retuning
+// =========================================================================
+//
+// Discourse exposes a large set of `--d-*` custom properties specifically so
+// themes can restyle core UI without writing selectors against core markup.
+// Retuning them here is the single highest-leverage part of this theme: it
+// keeps specificity at zero, survives core markup changes, and means most of
+// the visual identity is expressed as data rather than as overrides.
+//
+// Anything that can be done here is NOT done with a selector elsewhere.
+:root {
+  // -- Shape -------------------------------------------------------------
+  //
+  // One setting drives every corner in the interface, including core's own
+  // inputs, nav pills and tags.
+
+  --d-border-radius: var(--rc-radius);
+  --d-input-border-radius: var(--rc-radius-sm);
+  --d-nav-pill-border-radius: var(--rc-radius-sm);
+  --d-tag-border-radius: var(--rc-radius-sm);
+
+  // -- Layout ------------------------------------------------------------
+  //
+  // `--d-max-width` is the official content-width knob (core default
+  // 1110px). Driving it from the setting means the sidebar, header and
+  // every `.wrap` stay in agreement — no manual width overrides anywhere.
+
+  --d-max-width: var(--rc-content-width);
+  --d-wrap-padding-x: var(--rc-space-4);
+
+  // -- Content surface ---------------------------------------------------
+  //
+  // Core default is `initial` (transparent). Giving it a real surface is
+  // what separates reading areas — topic view, categories, user pages —
+  // from the page canvas, without the theme painting backgrounds itself.
+
+  --d-content-background: var(--rc-surface);
+
+  // -- Links -------------------------------------------------------------
+  //
+  // Left as `none` globally; base/_typography.scss underlines links inside
+  // post content only, where colour alone would not be sufficient.
+
+  --d-link-text-decoration: none;
+
+  // -- Navigation --------------------------------------------------------
+  //
+  // The active navigation marker is the main place the crimson appears.
+  // It is a 2px underline on the active item and nothing else — the text
+  // itself stays in the normal reading colour so the nav does not shout.
+
+  --d-nav-color: var(--rc-text-secondary);
+  --d-nav-color--hover: var(--rc-text);
+  --d-nav-color--active: var(--rc-text);
+  --d-nav-bg-color--hover: var(--rc-hover);
+  --d-nav-border-color--active: var(--rc-accent);
+  --d-nav-underline-height: 2px;
+  --d-nav-font-size: var(--font-0);
+
+  // -- Topic list --------------------------------------------------------
+  //
+  // Density lives here. `compact` trims the row padding and steps the title
+  // down to the base size; `comfortable` keeps closer to core's defaults.
+  // Either way the title stays the largest thing in the row.
+
+  --d-topic-list-data-padding-y: var(--rc-row-padding-block);
+  --d-topic-list-data-padding-x: var(--rc-space-2);
+  --d-topic-list-header-data-padding-y: var(--rc-space-2);
+  --d-topic-list-header-data-padding-x: var(--rc-space-2);
+  --d-topic-list-data-padding-inline-start: var(--rc-space-4);
+  --d-topic-list-data-padding-inline-end: var(--rc-space-4);
+  --d-topic-list-header-background-color: transparent;
+  --d-topic-list-header-text-color: var(--rc-text-muted);
+  --d-topic-list-header-font-size: var(--font-down-1);
+  --d-topic-list-data-font-size: var(--font-down-1);
+  --d-topic-list-metadata-top-space: var(--rc-space-1);
+  --d-topic-list-margin-bottom: 0;
+
+  @if "#{$topic_list_density}" == "comfortable" {
+    --d-topic-list-title-font-size: var(--font-up-1);
+    --d-topic-list-avatar-size: 24px;
+  } @else {
+    --d-topic-list-title-font-size: var(--font-0);
+    --d-topic-list-avatar-size: 20px;
+  }
+
+  // -- Tags --------------------------------------------------------------
+  //
+  // Core renders tags as bare text by default. Giving them a quiet chip
+  // makes them scannable as a group without competing with topic titles.
+  // Deliberately low contrast: tags are secondary information.
+
+  --d-tag-background-color: var(--rc-surface-sunken);
+  --d-tag-horizontal-padding: 0.45em;
+  --d-tag-font-size: var(--font-down-2);
+  --d-tag-font-weight: 500;
+
+  // -- Quotes ------------------------------------------------------------
+  //
+  // A thinner marker than core's 5px, in a neutral tone. Nested quotes in
+  // long technical threads get noisy fast when the marker is heavy.
+
+  --d-post-aside-background: var(--rc-surface-sunken);
+  --d-post-aside-border-left: 3px solid var(--rc-border-strong);
+
+  // -- Inputs ------------------------------------------------------------
+
+  --d-input-bg-color: var(--rc-surface);
+  --d-input-border: 1px solid var(--rc-border);
+  --d-input-focused-color: var(--tertiary);
+  --d-input-text-color: var(--rc-text);
+
+  // -- Category boxes ----------------------------------------------------
+
+  --d-category-border-accent-width: 3px;
+  --d-category-box-background-color: var(--rc-surface);
+}

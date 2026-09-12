@@ -1,0 +1,118 @@
+// =========================================================================
+// Tags and category badges
+// =========================================================================
+//
+// Tags carry a lot of weight in a robotics community — they are how a build
+// thread gets found two seasons later. They must be scannable as a group and
+// clearly subordinate to topic titles.
+//
+// Chip appearance comes from the `--d-tag-*` variables set in
+// base/_core-variables.scss. This file handles behaviour those variables do
+// not cover: grouping, overflow, and the category badge.
+//
+// No tag name is hardcoded anywhere.
+.discourse-tag,
+a.discourse-tag {
+  color: var(--rc-text-muted);
+  line-height: 1.6;
+  transition:
+    background-color var(--rc-transition),
+    color var(--rc-transition);
+
+  &:hover {
+    background: var(--rc-hover);
+    color: var(--rc-text);
+  }
+
+  &:focus-visible {
+    @include rc-focus-ring(1px);
+  }
+
+  // Long tags (Turkish compound tags get long) truncate rather than wrap
+  // mid-word inside their own chip.
+  max-width: 18ch;
+
+  @include rc-truncate;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+// Tag groups wrap cleanly wherever they appear.
+.discourse-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--rc-space-1);
+  min-width: 0;
+}
+
+// On a tag's own page, and in the composer's chooser, tags are the subject
+// rather than metadata, so they get full contrast.
+.tag-info .discourse-tag,
+.tags-input .discourse-tag,
+#topic-title .discourse-tag {
+  color: var(--rc-text);
+}
+
+// -------------------------------------------------------------------------
+// Category badges
+// -------------------------------------------------------------------------
+//
+// The category's configured colour is preserved — it is genuine information.
+// The theme only controls the shape and keeps the label readable.
+.badge-category__wrapper {
+  .badge-category {
+    border-radius: var(--rc-radius-sm);
+    font-weight: 500;
+
+    .badge-category__name {
+      @include rc-truncate;
+      max-width: 22ch;
+    }
+  }
+}
+
+// Subcategory badges show their parent's colour as a leading bar. Keeping
+// that intact is what makes hierarchy legible in a flat topic list.
+.badge-category.--style-square,
+.badge-category.--has-parent {
+  .badge-category__parent-icon {
+    opacity: 1;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Hashtags
+// -------------------------------------------------------------------------
+//
+// Inline #category and #tag references inside posts.
+.hashtag-cooked {
+  border-radius: var(--rc-radius-sm);
+  color: var(--rc-text-secondary);
+  padding: 0 0.2em;
+
+  &:hover {
+    background: var(--rc-hover);
+    color: var(--rc-text);
+  }
+
+  .hashtag-category-square,
+  .hashtag-category-badge {
+    border-radius: 2px;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Mentions
+// -------------------------------------------------------------------------
+.cooked a.mention,
+.d-editor-preview a.mention {
+  background: var(--mention-background-color);
+  border-radius: var(--rc-radius-sm);
+  color: var(--rc-text);
+  font-size: 0.95em;
+  padding: 0 0.3em;
+
+  &:hover {
+    background: var(--rc-selected);
+  }
+}

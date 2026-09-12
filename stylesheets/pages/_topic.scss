@@ -1,0 +1,318 @@
+// =========================================================================
+// Topic / thread view
+// =========================================================================
+//
+// Optimised for long reading sessions. Build threads on this forum will run
+// to hundreds of posts with heavy technical content, so the priorities are:
+// stable rhythm, clear separation between posts without card-like isolation,
+// a comfortable measure, and quotes that stay legible when nested.
+//
+// All native structure is preserved: post controls, the timeline, reply
+// relationships, edit history, moderation actions, bookmarks, reactions,
+// solution markers, user cards and the image lightbox.
+
+// -------------------------------------------------------------------------
+// Title
+// -------------------------------------------------------------------------
+#topic-title {
+  .fancy-title {
+    font-size: var(--font-up-4);
+    font-weight: 650;
+    line-height: 1.25;
+    text-wrap: pretty;
+
+    @include rc-wrap-anywhere;
+  }
+
+  .topic-category {
+    margin-block-start: var(--rc-space-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Post separation
+// -------------------------------------------------------------------------
+//
+// A hairline between posts, not a card each. Posts belong to one continuous
+// conversation; isolating them visually breaks the thread of an argument and
+// wastes vertical space.
+.topic-post {
+  .topic-body {
+    border-block-end: none;
+  }
+}
+
+.topic-area .topic-post article.boxed {
+  border-block-end: 1px solid var(--rc-border-subtle);
+  padding-block-end: var(--rc-space-4);
+}
+
+// The first post carries the question or the build premise, so it gets a
+// slightly stronger closing rule to mark the transition into replies.
+#post_1 article.boxed {
+  border-block-end-color: var(--rc-border);
+}
+
+// -------------------------------------------------------------------------
+// Author column
+// -------------------------------------------------------------------------
+//
+// Stable hierarchy: name first, then any group/title label, then the
+// timestamp. Everything else recedes.
+.topic-post .topic-meta-data {
+  align-items: baseline;
+
+  .names {
+    line-height: 1.35;
+
+    .first {
+      font-weight: 600;
+    }
+
+    // Username, when shown alongside a display name.
+    .username a,
+    a.trigger-user-card {
+      color: var(--rc-text);
+    }
+
+    // Group / title / flair labels. Quiet by default — a forum where every
+    // post shouts its author's title is unpleasant to read.
+    .user-title,
+    .user-group,
+    .post-ignored,
+    .flair-name {
+      color: var(--rc-text-muted);
+      font-size: var(--font-down-2);
+      font-weight: 500;
+    }
+
+    // Staff and moderators keep a genuine distinction, because knowing
+    // whether a reply is official matters.
+    .staff .user-title,
+    .moderator .user-title,
+    .admin .user-title {
+      color: var(--rc-accent);
+    }
+  }
+
+  .post-infos,
+  .post-info {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-2);
+  }
+
+  .post-info.post-date a {
+    color: var(--rc-text-muted);
+
+    &:hover {
+      color: var(--d-link-color);
+    }
+  }
+
+  // Post number. Useful for citing ("see #47") and should stay findable.
+  .post-info.post-date .post-number {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.topic-avatar {
+  border-block-start: none;
+
+  img.avatar {
+    border-radius: 50%;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Post body
+// -------------------------------------------------------------------------
+.topic-body .cooked {
+  color: var(--rc-text);
+  font-size: var(--font-0);
+
+  // Images get room to breathe. CAD screenshots, oscilloscope traces and
+  // robot photos are primary content in this community, not decoration.
+  // The lightbox wrapper's own behaviour is untouched.
+  .lightbox-wrapper,
+  > img,
+  p > img {
+    margin-block: var(--rc-space-4);
+  }
+
+  .lightbox-wrapper img {
+    border-radius: var(--rc-radius-sm);
+  }
+
+  // Core's lightbox caption bar.
+  .meta {
+    font-size: var(--font-down-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Quotes
+// -------------------------------------------------------------------------
+//
+// Marker weight and colours come from `--d-post-aside-*`, set in
+// base/_core-variables.scss. This section handles the parts core does not
+// expose as variables — chiefly nesting, which is where quotes get noisy.
+.cooked aside.quote,
+.d-editor-preview aside.quote {
+  border-radius: 0 var(--rc-radius-sm) var(--rc-radius-sm) 0;
+  margin-block: var(--rc-space-4);
+
+  .title {
+    border-block-end: 1px solid var(--rc-border-subtle);
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+
+    .avatar {
+      border-radius: 50%;
+    }
+  }
+
+  blockquote {
+    color: var(--rc-text-secondary);
+  }
+
+  // Nested quotes: each level keeps the marker but drops the fill, so a
+  // three-deep quote chain reads as indentation rather than as increasingly
+  // dark stacked boxes.
+  aside.quote,
+  blockquote aside.quote {
+    background: transparent;
+    margin-block: var(--rc-space-3);
+  }
+}
+
+// A plain markdown blockquote (no citation) is a lighter construct than a
+// quoted post and should look like one.
+.cooked > blockquote,
+.d-editor-preview > blockquote {
+  border-inline-start: 3px solid var(--rc-border);
+  background: transparent;
+  color: var(--rc-text-secondary);
+  margin-block: var(--rc-space-4);
+  padding-inline-start: var(--rc-space-4);
+}
+
+// -------------------------------------------------------------------------
+// Post controls
+// -------------------------------------------------------------------------
+.topic-post .post-controls {
+  .btn {
+    color: var(--rc-text-muted);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--rc-hover);
+      color: var(--rc-text);
+    }
+  }
+
+  // Like button keeps its semantic colour when active.
+  .toggle-like .d-icon-d-liked {
+    color: var(--love);
+  }
+
+  .bookmark.bookmarked .d-icon {
+    color: var(--tertiary);
+  }
+}
+
+// Reply-to indicator above a post.
+.topic-post .reply-to-tab {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-1);
+
+  &:hover {
+    color: var(--rc-text);
+  }
+}
+
+// The embedded posts panel that expands when following a reply chain.
+.topic-post .embedded-posts {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+
+  &.top {
+    margin-block-end: var(--rc-space-3);
+  }
+
+  &.bottom {
+    margin-block-start: var(--rc-space-3);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Solved / accepted answers
+// -------------------------------------------------------------------------
+//
+// Rendered by the discourse-solved plugin when it is installed. Styled
+// defensively — if the plugin is absent these selectors simply never match,
+// and nothing here is required for the theme to work.
+.topic-post.accepted-answer,
+.topic-post .accepted-answer {
+  .accepted-answer--solver,
+  .solved-panel {
+    color: var(--success);
+  }
+}
+
+.topic-list .topic-statuses .d-icon-check,
+.topic-list-item .status-solved {
+  color: var(--success);
+}
+
+// -------------------------------------------------------------------------
+// Timeline and progress
+// -------------------------------------------------------------------------
+.topic-timeline {
+  .timeline-scrollarea {
+    border-inline-start-color: var(--rc-border);
+  }
+
+  .timeline-handle {
+    background: var(--rc-accent);
+  }
+
+  .timeline-replies,
+  .timeline-ago {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-2);
+  }
+}
+
+#topic-progress {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border-subtle);
+  box-shadow: var(--rc-shadow-md);
+  font-variant-numeric: tabular-nums;
+}
+
+// -------------------------------------------------------------------------
+// Suggested / related topics
+// -------------------------------------------------------------------------
+#suggested-topics,
+.more-topics__container {
+  .topic-list-item {
+    @include rc-hairline;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Small screens
+// -------------------------------------------------------------------------
+
+@include rc-until(md) {
+  #topic-title .fancy-title {
+    font-size: var(--font-up-2);
+  }
+
+  .topic-body .cooked {
+    // Slightly tighter leading on narrow columns keeps more of a long post
+    // on screen without hurting readability.
+    line-height: 1.6;
+  }
+}

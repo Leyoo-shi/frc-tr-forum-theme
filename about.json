@@ -1,0 +1,45 @@
+{
+  "name": "Ro6one Community",
+  "component": false,
+  "authors": "Ro6one Robotics",
+  "about_url": "https://github.com/ro6one/forum-theme",
+  "license_url": "https://github.com/ro6one/forum-theme/blob/main/LICENSE",
+  "theme_version": "1.0.0",
+  "assets": {},
+  "modifiers": {
+    "serialize_topic_excerpts": {
+      "type": "setting",
+      "value": "show_topic_excerpts"
+    }
+  },
+  "color_schemes": {
+    "Ro6one Community": {
+      "primary": "1b1f24",
+      "secondary": "ffffff",
+      "tertiary": "2c5f96",
+      "quaternary": "b02a37",
+      "header_background": "ffffff",
+      "header_primary": "1b1f24",
+      "highlight": "fff3bf",
+      "danger": "b3261e",
+      "success": "1a7f47",
+      "love": "c2185b",
+      "selected": "e6edf5",
+      "hover": "f0f3f6"
+    },
+    "Ro6one Community Dark": {
+      "primary": "dfe3e8",
+      "secondary": "16181c",
+      "tertiary": "7aa7d9",
+      "quaternary": "e0616f",
+      "header_background": "16181c",
+      "header_primary": "dfe3e8",
+      "highlight": "4d4326",
+      "danger": "e5484d",
+      "success": "3dbd74",
+      "love": "e05c8a",
+      "selected": "243044",
+      "hover": "21242a"
+    }
+  }
+}

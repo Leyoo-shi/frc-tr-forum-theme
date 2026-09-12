@@ -1,0 +1,134 @@
+// =========================================================================
+// Header
+// =========================================================================
+//
+// Restyled, not rebuilt. Every native behaviour — home link, search, sidebar
+// toggle, notifications, messages, user menu, keyboard access, sticky
+// positioning — is core's and stays untouched. This file changes surface,
+// separation and density only.
+.d-header {
+  background: var(--header_background);
+
+  // A hairline instead of a shadow. The header needs to be clearly separated
+  // from content without visually floating above it.
+  border-block-end: 1px solid var(--rc-border-subtle);
+  box-shadow: none;
+}
+
+// Optional translucency, behind the `header_translucency` setting.
+//
+// Guarded three ways so it can never degrade the experience:
+//   - only when the browser supports backdrop-filter,
+//   - only on pointer-precise/large viewports, because a full-width blur is
+//     the single most expensive effect on low-end mobile GPUs,
+//   - only when the user has not asked for reduced transparency.
+//
+// The background stays at 85% opacity, so text contrast never depends on
+// whatever is scrolling underneath.
+@if rc-on($header_translucency) {
+  @supports (backdrop-filter: blur(1px)) {
+    @include rc-from(md) {
+      @media (prefers-reduced-transparency: no-preference) {
+        .d-header {
+          background: color-mix(
+            in srgb,
+            var(--header_background) 85%,
+            transparent
+          );
+          backdrop-filter: saturate(1.4) blur(12px);
+        }
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Logo
+// -------------------------------------------------------------------------
+.d-header .home-logo {
+  #site-logo,
+  .logo-mobile,
+  .logo-small {
+    // Keeps a tall logo from inflating the header. Core's own height rules
+    // still apply; this only caps the extreme.
+    max-height: 1.8em;
+    width: auto;
+  }
+}
+
+// Text fallback when no logo image is configured.
+.d-header .home-logo .site-title {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--header_primary);
+}
+
+// -------------------------------------------------------------------------
+// Header icons
+// -------------------------------------------------------------------------
+.d-header-icons {
+  .icon,
+  .btn {
+    color: var(--header_primary);
+    border-radius: var(--rc-radius-sm);
+    transition: background-color var(--rc-transition);
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--header_primary) 8%, transparent);
+      color: var(--header_primary);
+    }
+  }
+
+  // Notification / message counts. These must remain obvious — they are the
+  // one place in the header where saturated colour is justified.
+  .badge-notification {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Header search
+// -------------------------------------------------------------------------
+//
+// When the site is configured with the inline header search field, give it a
+// real input affordance. This styles the *native* field — the theme adds no
+// search UI of its own.
+.d-header .floating-search-input-wrapper,
+.d-header .search-input {
+  background: color-mix(in srgb, var(--header_primary) 6%, transparent);
+  border: 1px solid transparent;
+  border-radius: var(--rc-radius-sm);
+  transition:
+    background-color var(--rc-transition),
+    border-color var(--rc-transition);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--header_primary) 14%, transparent);
+  }
+
+  &:focus-within {
+    background: var(--rc-surface);
+    border-color: var(--tertiary);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Topic title in header
+// -------------------------------------------------------------------------
+//
+// Shown when scrolling down inside a topic. Long Turkish titles must
+// truncate rather than wrap the header onto a second line.
+.d-header .extra-info-wrapper {
+  .topic-link,
+  .topic-statuses {
+    min-width: 0;
+  }
+
+  .topic-link {
+    @include rc-truncate;
+    font-weight: 600;
+    color: var(--header_primary);
+  }
+}

@@ -1,0 +1,241 @@
+// =========================================================================
+// Categories
+// =========================================================================
+//
+// A large technical community accumulates a lot of categories, and the
+// categories page is how a newcomer builds a mental model of the place. It
+// should read like the index of a reference manual: hierarchy first,
+// descriptions readable but subordinate, activity visible at a glance.
+//
+// Explicitly not a wall of large cards.
+//
+// Category colours are core's and are preserved — they are how members
+// recognise a category without reading it.
+.category-list {
+  width: 100%;
+
+  .category-list-header th {
+    border-block-end: 1px solid var(--rc-border);
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Parent category rows
+// -------------------------------------------------------------------------
+.category-list-item {
+  @include rc-hairline;
+
+  > td {
+    padding-block: var(--rc-space-4);
+    vertical-align: top;
+  }
+
+  &:hover {
+    background: var(--rc-hover);
+  }
+}
+
+// The category title. This is the row's anchor, so it gets the most weight.
+.category-title-link {
+  .category-name {
+    color: var(--rc-text);
+    font-size: var(--font-up-1);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  &:hover .category-name {
+    color: var(--d-link-color);
+  }
+
+  &:focus-visible {
+    @include rc-focus-ring;
+    border-radius: var(--rc-radius-sm);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Description
+// -------------------------------------------------------------------------
+//
+// Readable, but clamped. Some administrators write several paragraphs of
+// category guidelines; those belong in the category's About topic, not in
+// the index.
+.category-description {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-1);
+  line-height: 1.55;
+  margin-block-start: var(--rc-space-1);
+  max-width: 62ch;
+
+  @include rc-clamp(2);
+}
+
+// -------------------------------------------------------------------------
+// Subcategories
+// -------------------------------------------------------------------------
+//
+// The key hierarchy cue. Subcategories are rendered as a distinct, quieter
+// row of chips beneath their parent so the two levels can never be confused,
+// however many subcategories exist.
+.subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rc-space-1) var(--rc-space-2);
+  margin-block-start: var(--rc-space-3);
+}
+
+.subcategory {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rc-space-1);
+  font-size: var(--font-down-1);
+
+  .subcategory-link,
+  a {
+    color: var(--rc-text-secondary);
+  }
+
+  .subcategory-count,
+  .category-stat {
+    color: var(--rc-text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Counts and activity
+// -------------------------------------------------------------------------
+.category-list .topics,
+.category-stat {
+  color: var(--rc-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.category-topics-count {
+  .value {
+    color: var(--rc-text);
+    font-weight: 600;
+  }
+}
+
+// The "latest topics" column alongside each category.
+.category-list .latest {
+  .featured-topic {
+    font-size: var(--font-down-1);
+    line-height: 1.45;
+    margin-block-end: var(--rc-space-2);
+
+    a.title {
+      color: var(--rc-text-secondary);
+
+      &:hover {
+        color: var(--d-link-color);
+      }
+    }
+
+    .topic-post-badges {
+      white-space: nowrap;
+    }
+  }
+}
+
+// Muted categories stay visible but recede.
+.category-list-item.muted {
+  .category-name {
+    color: var(--rc-text-muted);
+    font-weight: 500;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Category boxes
+// -------------------------------------------------------------------------
+//
+// Used when an administrator selects a boxed category page style. Kept
+// restrained: a bordered surface with the category's colour as a top accent
+// rule, rather than a saturated colour block.
+.category-boxes,
+.category-boxes-with-topics {
+  .category-box {
+    background: var(--rc-surface);
+    border: 1px solid var(--rc-border-subtle);
+    border-radius: var(--rc-radius);
+    box-shadow: none;
+    transition: border-color var(--rc-transition);
+
+    &:hover {
+      border-color: var(--rc-border-strong);
+    }
+  }
+
+  .category-box-heading {
+    .category-name {
+      font-size: var(--font-0);
+      font-weight: 600;
+    }
+  }
+
+  .description {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+
+    @include rc-clamp(3);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Compact category mode
+// -------------------------------------------------------------------------
+//
+// `compact_category_page` is for communities with many categories, where the
+// default spacing turns the index into a long scroll. It tightens the rows
+// and drops descriptions to a single line — it does not remove information
+// that exists nowhere else.
+
+@if rc-on($compact_category_page) {
+  .category-list-item > td {
+    padding-block: var(--rc-space-2);
+  }
+
+  .category-description {
+    @include rc-clamp(1);
+    margin-block-start: 0;
+  }
+
+  .category-title-link .category-name {
+    font-size: var(--font-0);
+  }
+
+  .subcategories {
+    margin-block-start: var(--rc-space-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Mobile
+// -------------------------------------------------------------------------
+//
+// Core renders a div-based list rather than a table on narrow screens.
+// Features are kept and reflowed, not hidden.
+
+@include rc-until(md) {
+  .category-list .category-list-item {
+    display: block;
+    padding-block: var(--rc-space-3);
+
+    .category-description {
+      @include rc-clamp(2);
+    }
+
+    .subcategories {
+      margin-block-start: var(--rc-space-2);
+    }
+  }
+}

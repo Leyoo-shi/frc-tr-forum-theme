@@ -1,0 +1,117 @@
+// =========================================================================
+// Badges, counts and indicators
+// =========================================================================
+
+// -------------------------------------------------------------------------
+// Notification counts
+// -------------------------------------------------------------------------
+//
+// Deliberately loud — an unread count that is easy to miss defeats its
+// purpose. This is one of the few saturated elements in the theme.
+.badge-notification {
+  background: var(--tertiary);
+  border-radius: var(--d-border-radius-pill);
+  color: var(--secondary);
+  font-size: var(--font-down-3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.25em 0.45em;
+
+  // "New topic" dots carry no number and should read as a dot.
+  &.new-topic {
+    background: var(--tertiary);
+  }
+
+  // Review queue / flag counts are a moderation signal, not a social one.
+  &.reviewables {
+    background: var(--danger);
+  }
+}
+
+// Unread post count on a topic row.
+.topic-post-badges .badge-notification.unread-posts {
+  background: var(--tertiary);
+  color: var(--secondary);
+}
+
+// -------------------------------------------------------------------------
+// Trust level and group flair
+// -------------------------------------------------------------------------
+.user-badge,
+.badge-group {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+  color: var(--rc-text-secondary);
+  font-size: var(--font-down-1);
+  font-weight: 500;
+
+  .d-icon {
+    color: var(--rc-text-muted);
+  }
+
+  // Core assigns gold/silver/bronze classes; those are meaningful and kept.
+  &.badge-type-gold .d-icon {
+    color: var(--gold);
+  }
+
+  &.badge-type-silver .d-icon {
+    color: var(--silver);
+  }
+
+  &.badge-type-bronze .d-icon {
+    color: var(--bronze);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Post count / likes heat
+// -------------------------------------------------------------------------
+//
+// Core shades busy topics through `.heatmap-*` classes. That is real signal
+// in a long list, so it is preserved rather than flattened.
+.badge-posts {
+  color: var(--rc-text-secondary);
+  font-weight: 600;
+}
+
+// -------------------------------------------------------------------------
+// Topic status icons
+// -------------------------------------------------------------------------
+.topic-statuses .d-icon {
+  vertical-align: baseline;
+}
+
+// -------------------------------------------------------------------------
+// Bookmarks
+// -------------------------------------------------------------------------
+.bookmark-list .bookmark-metadata,
+.bookmark-reminder {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-1);
+}
+
+// -------------------------------------------------------------------------
+// Polls
+// -------------------------------------------------------------------------
+//
+// Rendered by the poll plugin, which ships with Discourse. Kept consistent
+// with the theme's surfaces without altering poll behaviour.
+.poll {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+
+  .poll-info {
+    color: var(--rc-text-muted);
+  }
+
+  .bar {
+    background: var(--tertiary);
+  }
+
+  .poll-buttons .btn {
+    border-radius: var(--rc-radius-sm);
+  }
+}

@@ -1,0 +1,82 @@
+// =========================================================================
+// Main layout
+// =========================================================================
+//
+// Content width is set through core's `--d-max-width` in
+// base/_core-variables.scss, so this file only handles the reading-width
+// constraint and the shared page furniture.
+
+// -------------------------------------------------------------------------
+// Reading width
+// -------------------------------------------------------------------------
+//
+// The forum chrome can be wide — topic lists genuinely benefit from the
+// horizontal room on a large monitor. Long-form prose must not be, because
+// line lengths beyond roughly 90 characters measurably hurt reading.
+//
+// Core already ships `--topic-body-width` for exactly this purpose, so the
+// `reading_max_width` setting is applied there rather than by constraining
+// `.cooked` directly. That keeps core's own topic layout maths — avatar
+// gutter, timeline, gap — consistent with the new width.
+:root {
+  --topic-body-width: var(--rc-reading-width);
+}
+
+// -------------------------------------------------------------------------
+// Page furniture
+// -------------------------------------------------------------------------
+
+// Navigation pill rows (Latest / New / Unread / Top, category filters,
+// user page tabs). A single hairline under the row ties the tabs to the
+// content they filter.
+.navigation-container,
+.list-controls .nav-pills {
+  align-items: center;
+}
+
+#navigation-bar {
+  flex-wrap: wrap;
+}
+
+// -------------------------------------------------------------------------
+// Footer
+// -------------------------------------------------------------------------
+#main-outlet-wrapper + footer,
+.custom-footer-content {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-1);
+}
+
+// -------------------------------------------------------------------------
+// Empty and loading states
+// -------------------------------------------------------------------------
+//
+// These are easy to neglect and they are exactly what a brand-new community
+// will see most often in its first months.
+.empty-state {
+  color: var(--rc-text-secondary);
+  max-width: 44rem;
+
+  .empty-state__title,
+  .empty-state-title {
+    color: var(--rc-text);
+    font-weight: 600;
+  }
+
+  .empty-state__body,
+  .empty-state-body {
+    color: var(--rc-text-muted);
+  }
+}
+
+// Core's spinner. Kept, just tinted to the theme.
+.spinner {
+  border-color: var(--rc-border);
+  border-right-color: var(--tertiary);
+}
+
+// Skeleton placeholders shown while a list loads.
+.topic-list .loading-container,
+.loading-container {
+  color: var(--rc-text-muted);
+}

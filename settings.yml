@@ -1,0 +1,67 @@
+# Ro6one Community — theme settings
+#
+# Every setting here is also exposed to SCSS as `$setting_name`, which is how
+# the layout/density/radius tokens are applied without any JavaScript.
+# Descriptions live in locales/*.yml under theme_metadata.settings.
+
+# --- Community identity -------------------------------------------------
+
+community_tagline:
+  type: string
+  default: ""
+  max: 120
+
+show_community_tagline:
+  type: bool
+  default: false
+
+footer_organization_text:
+  type: string
+  default: ""
+  max: 120
+
+footer_organization_url:
+  type: string
+  default: ""
+  max: 200
+
+# --- Layout -------------------------------------------------------------
+
+content_max_width:
+  type: integer
+  default: 1280
+  min: 960
+  max: 1800
+
+reading_max_width:
+  type: integer
+  default: 760
+  min: 560
+  max: 1100
+
+# --- Density and shape --------------------------------------------------
+
+topic_list_density:
+  type: enum
+  default: compact
+  choices:
+    - compact
+    - comfortable
+
+show_topic_excerpts:
+  type: bool
+  default: false
+
+compact_category_page:
+  type: bool
+  default: false
+
+interface_corner_radius:
+  type: integer
+  default: 6
+  min: 0
+  max: 16
+
+header_translucency:
+  type: bool
+  default: true

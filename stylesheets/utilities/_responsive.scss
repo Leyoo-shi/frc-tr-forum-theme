@@ -1,0 +1,93 @@
+// =========================================================================
+// Responsive refinements
+// =========================================================================
+//
+// Most responsive behaviour lives with the component it belongs to; this
+// file holds only the cross-cutting adjustments.
+//
+// Principle: nothing is hidden to solve a layout problem. Rows reflow,
+// toolbars scroll, navigation wraps — but every function stays reachable on
+// every supported screen size.
+//
+// Targets: small phones (320px) through large desktop monitors.
+
+// -------------------------------------------------------------------------
+// Small phones
+// -------------------------------------------------------------------------
+//
+// At 320–400px the constraint is horizontal space, so padding is trimmed
+// before anything else is touched.
+
+@include rc-until(sm) {
+  :root {
+    --d-wrap-padding-x: var(--rc-space-3);
+    --d-topic-list-data-padding-inline-start: var(--rc-space-3);
+    --d-topic-list-data-padding-inline-end: var(--rc-space-3);
+  }
+
+  // Body text should not shrink on small screens; it is already at the
+  // site's configured base size and that is the readable floor.
+  #topic-title .fancy-title {
+    font-size: var(--font-up-1);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Tablets
+// -------------------------------------------------------------------------
+
+@include rc-between(md, lg) {
+  :root {
+    --rc-row-padding-block: 0.55rem;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Large desktop monitors
+// -------------------------------------------------------------------------
+//
+// Beyond the configured content width the layout stops growing. Additional
+// width becomes margin rather than ever-longer lines of text — the topic
+// list benefits from horizontal room, prose does not.
+
+@include rc-from(2xl) {
+  :root {
+    --d-main-content-gap: var(--rc-space-7);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Print
+// -------------------------------------------------------------------------
+//
+// Build documentation does get printed and taken into a workshop.
+
+@media print {
+  .d-header,
+  .sidebar-wrapper,
+  #topic-progress-wrapper,
+  .topic-timeline,
+  .post-controls,
+  .topic-footer-buttons,
+  #reply-control {
+    display: none;
+  }
+
+  body,
+  .cooked {
+    background: #fff;
+    color: #000;
+  }
+
+  .topic-post {
+    break-inside: avoid;
+  }
+
+  // A code block that silently loses its final lines on paper is worse than
+  // one that wraps.
+  pre,
+  pre code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}

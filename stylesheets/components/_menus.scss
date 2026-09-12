@@ -1,0 +1,160 @@
+// =========================================================================
+// Menus, dropdowns, tooltips and user cards
+// =========================================================================
+//
+// One shared surface treatment for everything that floats above the page, so
+// the user menu, hamburger, notification panel, post admin menu, float-kit
+// tooltips and user cards all read as the same class of object.
+.menu-panel,
+.fk-d-menu,
+.fk-d-menu__inner-content,
+.dropdown-menu,
+.user-menu {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius);
+  box-shadow: var(--shadow-menu-panel);
+}
+
+// -------------------------------------------------------------------------
+// Menu rows
+// -------------------------------------------------------------------------
+.menu-panel,
+.user-menu,
+.dropdown-menu {
+  li a,
+  .btn-flat,
+  .widget-link {
+    border-radius: var(--rc-radius-sm);
+    color: var(--rc-text-secondary);
+    transition: background-color var(--rc-transition);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--rc-hover);
+      color: var(--rc-text);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// User menu
+// -------------------------------------------------------------------------
+.user-menu {
+  .tabs-list .btn {
+    border-radius: var(--rc-radius-sm);
+    color: var(--rc-text-muted);
+
+    &.active {
+      background: var(--rc-selected);
+      color: var(--rc-text);
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring(-2px);
+    }
+  }
+
+  // Unread notifications must stand out from read ones without relying on
+  // colour alone — core adds a background, the theme adds weight.
+  .notification.unread,
+  li.unread {
+    background: var(--tertiary-very-low);
+
+    .item-label,
+    .item-description {
+      font-weight: 600;
+    }
+  }
+
+  .item-description {
+    color: var(--rc-text-muted);
+  }
+
+  .notification-date,
+  .relative-date {
+    color: var(--rc-text-faint);
+    font-size: var(--font-down-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Tooltips
+// -------------------------------------------------------------------------
+//
+// Tooltips are supplementary. Nothing in this theme is reachable only by
+// hovering to reveal a tooltip.
+.fk-d-tooltip__content,
+.tippy-box {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius-sm);
+  box-shadow: var(--shadow-dropdown);
+  color: var(--rc-text);
+  font-size: var(--font-down-1);
+}
+
+// -------------------------------------------------------------------------
+// User card
+// -------------------------------------------------------------------------
+.user-card,
+.group-card {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius);
+  box-shadow: var(--shadow-card);
+
+  .names .username,
+  .names .full-name {
+    color: var(--rc-text);
+  }
+
+  .user-card-metadata,
+  .bio {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+  }
+
+  .card-row + .card-row {
+    border-block-start: 1px solid var(--rc-border-subtle);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Navigation pills
+// -------------------------------------------------------------------------
+//
+// Colours come from the `--d-nav-*` variables in base/_core-variables.scss;
+// this only handles wrapping so a long filter row never overflows.
+.nav-pills {
+  flex-wrap: wrap;
+
+  > li > a {
+    white-space: nowrap;
+
+    &:focus-visible {
+      @include rc-focus-ring(-2px);
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// Horizontal overflow on small screens
+// -------------------------------------------------------------------------
+//
+// Rather than hiding navigation items on mobile, the row scrolls. Every
+// destination stays reachable.
+
+@include rc-until(md) {
+  .nav-pills,
+  #navigation-bar {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

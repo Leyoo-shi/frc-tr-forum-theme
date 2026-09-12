@@ -1,0 +1,29 @@
+tr_TR:
+  community_footer:
+    founded_by: "Kurucu:"
+
+  theme_metadata:
+    description: "Teknik robotik toplulukları için bilgi yoğunluğu yüksek ve erişilebilir bir tema. Sakin nötr yüzeyler, ölçülü bir koyu kırmızı vurgu ve hızlı taramaya uygun konu listeleri."
+    settings:
+      community_tagline:
+        description: "Topluluğu tek cümleyle tanıtan kısa açıklama; ana sayfada konu listesinin üzerinde görünür. Boş bırakırsanız hiçbir şey gösterilmez. Topluluğunuzun kendi dilinde yazın."
+      show_community_tagline:
+        description: "Topluluk açıklamasını ana sayfada göster. Açıklama boşken bu ayarın bir etkisi olmaz."
+      footer_organization_text:
+        description: "Bu topluluğu kuran kuruluşun adı; sayfa altında küçük bir künye olarak görünür. Boş bırakırsanız künye tamamen gizlenir."
+      footer_organization_url:
+        description: "Kurucu kuruluşun adına eklenecek isteğe bağlı bağlantı. Yalnızca http:// ve https:// ile başlayan adresler bağlanır."
+      content_max_width:
+        description: "Forum düzeninin piksel cinsinden azami genişliği. Yüksek değerler geniş ekranlarda konu listelerine daha fazla alan tanır; gönderi metninin genişliğini etkilemez."
+      reading_max_width:
+        description: "Gönderi metninin piksel cinsinden azami genişliği. Uzun teknik gönderilerin rahat okunması için düzenden dar tutulur. Çoğu yazı tipinde 700–800 arası uygun bir satır uzunluğu verir."
+      topic_list_density:
+        description: "Konu listelerindeki satır sıklığı. “compact” ekrana daha çok konu sığdırır ve yoğun forumlar için önerilir; “comfortable” daha ferah bir görünüm sağlar."
+      show_topic_excerpts:
+        description: "Konu listelerinde ilk gönderinin iki satırlık önizlemesini göster. Her satırın yüksekliğini yaklaşık iki katına çıkardığı için varsayılan olarak kapalıdır."
+      compact_category_page:
+        description: "Çok sayıda kategorisi olan topluluklar için kategoriler sayfasını sıkılaştırır. Açıklamalar tek satıra iner; hiçbir bilgi kaldırılmaz."
+      interface_corner_radius:
+        description: "Arayüz genelindeki köşe yuvarlaklığı (piksel). 0 keskin köşeler verir, varsayılan değer 6’dır, yüksek değerler daha yumuşak bir görünüm sağlar."
+      header_translucency:
+        description: "İçerik altından kayarken üst çubuğa hafif bir saydamlık ve bulanıklık verir. Küçük ekranlarda ve kullanıcı azaltılmış saydamlık tercih ettiğinde otomatik olarak devre dışı kalır."

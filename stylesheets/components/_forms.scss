@@ -1,0 +1,189 @@
+// =========================================================================
+// Form controls
+// =========================================================================
+//
+// Most of the input appearance is already handled by the `--d-input-*`
+// variables set in base/_core-variables.scss. This file covers the controls
+// core does not expose as variables, and makes focus unmistakable.
+
+// -------------------------------------------------------------------------
+// Text inputs
+// -------------------------------------------------------------------------
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
+  background: var(--d-input-bg-color);
+  border: var(--d-input-border);
+  border-radius: var(--d-input-border-radius);
+  color: var(--rc-text);
+  transition:
+    border-color var(--rc-transition),
+    box-shadow var(--rc-transition);
+
+  &::placeholder {
+    color: var(--rc-text-faint);
+  }
+
+  &:hover:not(:disabled, :read-only) {
+    border-color: var(--rc-border-strong);
+  }
+
+  // Focus is carried by both the border colour and a soft ring, so it is
+  // obvious even against a busy background like the composer.
+  &:focus {
+    border-color: var(--tertiary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--tertiary) 22%, transparent);
+    outline: none;
+  }
+
+  &:focus-visible {
+    @include rc-focus-ring(0);
+    outline-offset: 0;
+  }
+
+  &:disabled {
+    background: var(--rc-surface-sunken);
+    color: var(--rc-text-faint);
+    cursor: not-allowed;
+  }
+}
+
+textarea {
+  @include rc-wrap-anywhere;
+}
+
+// -------------------------------------------------------------------------
+// Checkboxes and radios
+// -------------------------------------------------------------------------
+//
+// `accent-color` restyles the native controls without replacing them, which
+// keeps their built-in keyboard behaviour and screen-reader semantics.
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--tertiary);
+  cursor: pointer;
+
+  &:focus-visible {
+    @include rc-focus-ring(1px);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Select-kit
+// -------------------------------------------------------------------------
+//
+// Discourse's own dropdown component — used for the category chooser, tag
+// chooser, notification levels, admin filters and more. Restyled, never
+// rebuilt: all keyboard and filtering behaviour is core's.
+.select-kit {
+  .select-kit-header {
+    background: var(--d-input-bg-color);
+    border: var(--d-input-border);
+    border-radius: var(--d-input-border-radius);
+    color: var(--rc-text);
+    transition: border-color var(--rc-transition);
+
+    &:hover {
+      border-color: var(--rc-border-strong);
+    }
+
+    &:focus,
+    &:focus-within,
+    &.is-focused {
+      border-color: var(--tertiary);
+      outline: none;
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring(1px);
+    }
+  }
+
+  .select-kit-body {
+    background: var(--rc-surface-raised);
+    border: 1px solid var(--rc-border);
+    border-radius: var(--rc-radius-sm);
+    box-shadow: var(--shadow-dropdown);
+  }
+
+  .select-kit-row {
+    border-radius: var(--rc-radius-sm);
+
+    &:hover,
+    &.is-highlighted {
+      background: var(--rc-hover);
+    }
+
+    &.is-selected {
+      background: var(--rc-selected);
+      font-weight: 600;
+    }
+  }
+
+  .select-kit-filter {
+    border-block-end: 1px solid var(--rc-border-subtle);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Form validation
+// -------------------------------------------------------------------------
+.d-form__field--error,
+.has-error {
+  input,
+  textarea,
+  select {
+    border-color: var(--danger);
+
+    &:focus {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 22%, transparent);
+    }
+  }
+}
+
+.validation-error,
+.d-form__error {
+  color: var(--danger);
+  font-size: var(--font-down-1);
+}
+
+// -------------------------------------------------------------------------
+// Alerts and banners
+// -------------------------------------------------------------------------
+//
+// Each state is carried by an icon or text plus a border, not by colour
+// alone.
+.alert {
+  border: 1px solid var(--rc-border-subtle);
+  border-inline-start-width: 3px;
+  border-radius: var(--rc-radius-sm);
+
+  &.alert-info {
+    background: var(--tertiary-very-low);
+    border-inline-start-color: var(--tertiary);
+  }
+
+  &.alert-success {
+    background: var(--success-low);
+    border-inline-start-color: var(--success);
+  }
+
+  &.alert-error,
+  &.alert-danger {
+    background: var(--danger-low);
+    border-inline-start-color: var(--danger);
+  }
+}
+
+// Site-wide banner and the "you are browsing as anonymous" style notices.
+.row .alert.alert-info,
+#banner {
+  color: var(--rc-text);
+}

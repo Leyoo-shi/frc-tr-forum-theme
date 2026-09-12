@@ -1,0 +1,137 @@
+// =========================================================================
+// Design tokens
+// =========================================================================
+//
+// Every value the theme reuses lives here, as a CSS custom property on
+// :root, so it can be inspected in devtools and overridden by a component.
+//
+// Three rules govern this file:
+//
+//   1. Colours are DERIVED, never literal. They are expressed in terms of
+//      Discourse's own semantic palette (--primary, --secondary, --tertiary,
+//      ...) so the theme keeps working when an administrator selects a
+//      colour palette this theme does not ship.
+//
+//   2. Light and dark are handled by `light-dark()`, which reads the
+//      `color-scheme` property Discourse already sets on :root from the
+//      active palette. No duplicated dark-mode block, no body-class
+//      dependency, and it stays correct for user-selected palettes.
+//
+//   3. Theme settings reach SCSS as UNQUOTED STRINGS (Discourse emits
+//      `$name: unquote("6")`), so they are only ever interpolated, never
+//      used in Sass arithmetic. Where a derived value is needed, CSS
+//      `calc()`/`min()` does the maths at runtime instead.
+:root {
+  // -- Surfaces ----------------------------------------------------------
+  //
+  // --rc-page is the canvas. --rc-surface is for things that genuinely sit
+  // above it (menus, modals, the composer, user cards). Topic rows and posts
+  // deliberately do NOT get a surface: a forum reads faster when rows share
+  // one background and are separated by hairlines instead of floating as
+  // cards.
+
+  --rc-page: light-dark(
+    color-mix(in srgb, var(--secondary) 97%, var(--primary)),
+    var(--secondary)
+  );
+  --rc-surface: light-dark(
+    var(--secondary),
+    color-mix(in srgb, var(--secondary) 94%, var(--primary))
+  );
+  --rc-surface-raised: light-dark(
+    var(--secondary),
+    color-mix(in srgb, var(--secondary) 89%, var(--primary))
+  );
+
+  // Recessed: code blocks, quotes, table headers. Reads as a distinct block
+  // against the page in both schemes.
+  --rc-surface-sunken: light-dark(
+    color-mix(in srgb, var(--secondary) 95%, var(--primary)),
+    color-mix(in srgb, var(--secondary) 97%, var(--primary))
+  );
+  --rc-hover: var(--d-hover);
+  --rc-selected: var(--d-selected);
+
+  // -- Borders -----------------------------------------------------------
+  //
+  // Three weights only. Most separation in this theme uses
+  // --rc-border-subtle; anything heavier marks a real boundary.
+
+  --rc-border-subtle: color-mix(in srgb, var(--primary) 12%, transparent);
+  --rc-border: color-mix(in srgb, var(--primary) 20%, transparent);
+  --rc-border-strong: color-mix(in srgb, var(--primary) 34%, transparent);
+
+  // -- Text --------------------------------------------------------------
+
+  --rc-text: var(--primary);
+  --rc-text-secondary: var(--primary-high);
+  --rc-text-muted: var(--primary-medium);
+  --rc-text-faint: var(--primary-low-mid);
+
+  // -- Accent ------------------------------------------------------------
+  //
+  // The crimson. Mapped to --quaternary so administrators retune it from the
+  // colour palette editor rather than by forking the theme. Used for
+  // identity moments only: the active navigation marker and the founder
+  // attribution. Links and primary buttons stay on --tertiary, which is what
+  // keeps the interface from turning red.
+
+  --rc-accent: var(--quaternary);
+  --rc-accent-soft: color-mix(in srgb, var(--quaternary) 12%, transparent);
+
+  // -- Shape -------------------------------------------------------------
+  //
+  // Driven by the `interface_corner_radius` setting. Small chips clamp at
+  // 4px so a 16px setting does not turn tags into pills; `min()` is CSS, not
+  // Sass, because the setting is a string.
+
+  --rc-radius: #{$interface_corner_radius}px;
+  --rc-radius-sm: min(#{$interface_corner_radius}px, 4px);
+  --rc-radius-lg: calc(#{$interface_corner_radius}px + 2px);
+
+  // -- Spacing -----------------------------------------------------------
+
+  --rc-space-1: 0.25rem;
+  --rc-space-2: 0.5rem;
+  --rc-space-3: 0.75rem;
+  --rc-space-4: 1rem;
+  --rc-space-5: 1.5rem;
+  --rc-space-6: 2rem;
+  --rc-space-7: 3rem;
+
+  // -- Layout ------------------------------------------------------------
+
+  --rc-content-width: #{$content_max_width}px;
+  --rc-reading-width: #{$reading_max_width}px;
+
+  // -- Topic list density ------------------------------------------------
+  //
+  // The most load-bearing token in the theme. `compact` is the default
+  // because scanning many discussions quickly is the point of a forum index.
+
+  @if "#{$topic_list_density}" == "comfortable" {
+    --rc-row-padding-block: 0.7rem;
+    --rc-row-gap: var(--rc-space-2);
+  } @else {
+    --rc-row-padding-block: 0.45rem;
+    --rc-row-gap: var(--rc-space-1);
+  }
+
+  // -- Elevation ---------------------------------------------------------
+  //
+  // Shadows are always black regardless of scheme, so a literal rgba() is
+  // the correct expression here — this matches how core defines --shadow-*.
+  // Core's own --shadow-dropdown / --shadow-modal are reused elsewhere
+  // rather than redefined.
+
+  --rc-shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.06);
+  --rc-shadow-md: 0 4px 16px rgb(0, 0, 0, 0.12);
+
+  // -- Motion ------------------------------------------------------------
+  //
+  // Short and few. base/_accessibility.scss zeroes this out under
+  // prefers-reduced-motion, so every transition built on the token
+  // automatically respects the preference.
+
+  --rc-transition: 0.12s ease;
+}

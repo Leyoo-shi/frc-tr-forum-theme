@@ -1,0 +1,221 @@
+// =========================================================================
+// User profiles
+// =========================================================================
+//
+// A forum profile is a record of someone's contributions, not a social
+// media page. The aim is an informative, calm summary that helps a reader
+// judge context — how long someone has been here, what they work on, what
+// they have answered — without vanity metrics or a hero banner.
+//
+// All native sections are preserved: avatar, bio, groups, badges, activity,
+// topics, replies, bookmarks, preferences, messages and invites.
+.user-main {
+  .about {
+    background: var(--rc-surface);
+    border: 1px solid var(--rc-border-subtle);
+    border-radius: var(--rc-radius);
+
+    // Core supports a profile background image. It is kept, but the overlay
+    // is strengthened so the name and bio stay readable over an arbitrary
+    // user-uploaded photo — a real contrast risk otherwise.
+    &.has-background {
+      .details {
+        background: linear-gradient(
+          to bottom,
+          rgb(0, 0, 0, 0.15),
+          rgb(0, 0, 0, 0.65)
+        );
+      }
+    }
+
+    .details {
+      border-radius: var(--rc-radius) var(--rc-radius) 0 0;
+    }
+
+    .primary-textual {
+      h1.username {
+        font-size: var(--font-up-3);
+        font-weight: 650;
+        line-height: 1.2;
+
+        @include rc-wrap-anywhere;
+      }
+
+      h2.full-name {
+        color: var(--rc-text-secondary);
+        font-size: var(--font-up-1);
+        font-weight: 500;
+      }
+
+      h3 {
+        color: var(--rc-text-muted);
+        font-size: var(--font-down-1);
+        font-weight: 500;
+      }
+    }
+  }
+
+  .user-profile-image {
+    border-radius: var(--rc-radius) var(--rc-radius) 0 0;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Bio
+// -------------------------------------------------------------------------
+.user-content .bio,
+.user-profile-inner .bio {
+  @include rc-wrap-anywhere;
+  line-height: 1.6;
+  max-width: var(--rc-reading-width);
+}
+
+// -------------------------------------------------------------------------
+// Stats
+// -------------------------------------------------------------------------
+//
+// Presented as a quiet row of facts rather than as dashboard tiles.
+.user-main .stats {
+  .stat-label {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-2);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    color: var(--rc-text);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .linked-stat a:focus-visible {
+    @include rc-focus-ring;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Navigation
+// -------------------------------------------------------------------------
+.user-navigation {
+  .nav-pills {
+    border-block-end: 1px solid var(--rc-border-subtle);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Activity stream
+// -------------------------------------------------------------------------
+.user-stream {
+  .user-stream-item {
+    @include rc-hairline;
+    transition: background-color var(--rc-transition);
+
+    &:hover {
+      background: var(--rc-hover);
+    }
+  }
+
+  .title a,
+  .stream-topic-title .title {
+    color: var(--rc-text);
+    font-weight: 500;
+
+    &:hover {
+      color: var(--d-link-color);
+    }
+  }
+
+  .excerpt {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+    line-height: 1.55;
+
+    @include rc-clamp(3);
+  }
+
+  .time,
+  .relative-date {
+    color: var(--rc-text-faint);
+    font-size: var(--font-down-2);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Badges and groups
+// -------------------------------------------------------------------------
+.user-content .badge-card,
+.badge-card {
+  background: var(--d-badge-card-background-color);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius);
+  box-shadow: none;
+
+  .badge-card__description {
+    color: var(--rc-text-muted);
+  }
+}
+
+.group-info-wrapper,
+.groups-table {
+  .group-name,
+  .groups-table-name {
+    font-weight: 600;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Preferences
+// -------------------------------------------------------------------------
+//
+// Long forms. Clear section separation matters more than decoration.
+.user-preferences {
+  .control-group {
+    border-block-end: 1px solid var(--rc-border-subtle);
+    padding-block: var(--rc-space-4);
+
+    &:last-child {
+      border-block-end: none;
+    }
+  }
+
+  .control-label,
+  legend {
+    color: var(--rc-text);
+    font-weight: 600;
+  }
+
+  .instructions {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+    line-height: 1.5;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Private messages
+// -------------------------------------------------------------------------
+.user-messages,
+.private-message-map {
+  .participant,
+  .user {
+    color: var(--rc-text-secondary);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Small screens
+// -------------------------------------------------------------------------
+
+@include rc-until(md) {
+  .user-main .about .primary-textual h1.username {
+    font-size: var(--font-up-1);
+  }
+
+  // The stats row scrolls rather than wrapping into an awkward grid.
+  .user-main .stats {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}

@@ -1,0 +1,101 @@
+// =========================================================================
+// Sidebar
+// =========================================================================
+//
+// Discourse's native sidebar is kept and integrated, not replaced. Section
+// structure, custom sections, category and tag links, and the admin sidebar
+// all continue to work exactly as core defines them.
+//
+// No category or tag name is referenced anywhere in this file: the community
+// will add its own categories (FRC, FTC, VEX, electronics, CAD, ...) and the
+// theme must not need to know them.
+.sidebar-wrapper {
+  background: var(--rc-page);
+  border-inline-end: 1px solid var(--rc-border-subtle);
+}
+
+// -------------------------------------------------------------------------
+// Section headers
+// -------------------------------------------------------------------------
+//
+// Quiet, uppercase, small. They label the groups without competing with the
+// links inside them.
+.sidebar-section-header {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+// -------------------------------------------------------------------------
+// Links
+// -------------------------------------------------------------------------
+.sidebar-section-link {
+  border-radius: var(--rc-radius-sm);
+  color: var(--rc-text-secondary);
+  transition:
+    background-color var(--rc-transition),
+    color var(--rc-transition);
+
+  &:hover {
+    background: var(--rc-hover);
+    color: var(--rc-text);
+  }
+
+  // Active state reads through three cues at once — weight, colour and a
+  // filled surface — so it never depends on colour alone.
+  &.active {
+    background: var(--rc-selected);
+    color: var(--rc-text);
+    font-weight: 600;
+  }
+
+  &:focus-visible {
+    @include rc-focus-ring(-2px);
+  }
+}
+
+// Long category and tag names must truncate rather than wrap the sidebar
+// into a ragged multi-line list. Turkish category names are often long.
+.sidebar-section-link-content-text {
+  @include rc-truncate;
+}
+
+// Counts and badges sit at the end of the row and stay quiet.
+.sidebar-section-link-content-badge {
+  color: var(--rc-text-muted);
+  font-size: var(--font-down-2);
+  font-variant-numeric: tabular-nums;
+}
+
+// -------------------------------------------------------------------------
+// Category and tag markers
+// -------------------------------------------------------------------------
+//
+// Core renders a category's configured colour here. That colour is genuine
+// information — it is how regulars recognise a category at a glance — so the
+// theme leaves it alone and only ensures it stays visible.
+.sidebar-section-link-prefix {
+  &.icon,
+  &.span {
+    opacity: 1;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Unread / new indicators
+// -------------------------------------------------------------------------
+.sidebar-section-link-suffix.icon.unread {
+  color: var(--tertiary);
+}
+
+// -------------------------------------------------------------------------
+// Footer actions
+// -------------------------------------------------------------------------
+.sidebar-footer-wrapper {
+  .sidebar-footer-container {
+    border-block-start: 1px solid var(--rc-border-subtle);
+  }
+  background: var(--rc-page);
+}

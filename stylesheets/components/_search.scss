@@ -1,0 +1,169 @@
+// =========================================================================
+// Search
+// =========================================================================
+//
+// A technical archive is only as good as its search, so search is treated as
+// a first-class surface. The theme changes hierarchy and legibility only —
+// the search implementation, the quick-search menu, advanced filters and all
+// keyboard behaviour are core's, and no decorative duplicate search field is
+// added anywhere.
+
+// -------------------------------------------------------------------------
+// Quick search menu
+// -------------------------------------------------------------------------
+.search-menu .menu-panel,
+.search-menu-container .menu-panel {
+  background: var(--rc-surface-raised);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--rc-radius);
+  box-shadow: var(--shadow-menu-panel);
+}
+
+.search-menu {
+  .search-input {
+    background: var(--d-input-bg-color);
+    border: var(--d-input-border);
+    border-radius: var(--rc-radius-sm);
+
+    &:focus-within {
+      border-color: var(--tertiary);
+    }
+  }
+
+  .search-menu-assistant-item,
+  .search-result-topic li,
+  .search-result-category li,
+  .search-result-user li,
+  .search-result-tag li {
+    border-radius: var(--rc-radius-sm);
+
+    &:hover,
+    &.selected {
+      background: var(--rc-hover);
+    }
+  }
+
+  // Section labels ("Topics", "Categories", "Users") stay quiet.
+  .search-menu-initial-options .search-menu-assistant-item .label-suffix,
+  .heading {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-2);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Full-page search results
+// -------------------------------------------------------------------------
+//
+// Result titles dominate; the blurb supports them; category, tags, author and
+// date are metadata and are treated exactly like metadata elsewhere in the
+// theme so they can be skipped while scanning.
+.search-results {
+  .fps-result {
+    @include rc-hairline;
+    padding-block: var(--rc-space-4);
+    transition: background-color var(--rc-transition);
+
+    &:hover {
+      background: var(--rc-hover);
+    }
+  }
+
+  .search-link {
+    .topic-title {
+      color: var(--rc-text);
+      font-size: var(--font-up-1);
+      font-weight: 600;
+      line-height: 1.35;
+
+      @include rc-wrap-anywhere;
+    }
+
+    &:hover .topic-title {
+      color: var(--d-link-color);
+    }
+
+    &:focus-visible {
+      @include rc-focus-ring(-2px);
+      border-radius: var(--rc-radius-sm);
+    }
+  }
+
+  // The matched excerpt. Core wraps matched terms in <mark>-like spans.
+  .blurb {
+    color: var(--rc-text-secondary);
+    font-size: var(--font-down-1);
+    line-height: 1.55;
+    margin-block-start: var(--rc-space-1);
+
+    @include rc-clamp(3);
+
+    .search-highlight {
+      background: var(--highlight-bg);
+      border-radius: 2px;
+      color: var(--rc-text);
+      font-weight: 600;
+      padding: 0 0.15em;
+    }
+  }
+
+  .search-category,
+  .badge-category__wrapper,
+  .discourse-tags {
+    font-size: var(--font-down-2);
+  }
+}
+
+// Result count and sort controls.
+.search-header,
+.search-advanced-title,
+.search-results-count {
+  color: var(--rc-text-muted);
+}
+
+// -------------------------------------------------------------------------
+// Advanced search
+// -------------------------------------------------------------------------
+//
+// Must stay fully usable — it is how people find a three-year-old answer.
+// Given a real panel surface so it does not read as an afterthought.
+.search-advanced-options,
+.search-advanced .search-advanced-sidebar {
+  background: var(--rc-surface-sunken);
+  border: 1px solid var(--rc-border-subtle);
+  border-radius: var(--rc-radius-sm);
+  padding: var(--rc-space-4);
+
+  .control-group > label,
+  .control-label {
+    color: var(--rc-text-secondary);
+    font-size: var(--font-down-1);
+    font-weight: 600;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Highlighted terms inside an opened topic
+// -------------------------------------------------------------------------
+.cooked .search-highlight,
+.topic-body .highlighted {
+  background: var(--highlight-bg);
+  border-radius: 2px;
+}
+
+// -------------------------------------------------------------------------
+// Mobile
+// -------------------------------------------------------------------------
+
+@include rc-until(md) {
+  .search-results .search-link .topic-title {
+    font-size: var(--font-0);
+  }
+
+  // The advanced panel stacks above results instead of disappearing.
+  .search-advanced .search-advanced-sidebar {
+    margin-block-end: var(--rc-space-4);
+  }
+}
