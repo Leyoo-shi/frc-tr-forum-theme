@@ -12,6 +12,38 @@ than to one team. Ro6one branding is limited to an optional one-line footer
 attribution and the accent colour — both configurable, both removable,
 neither hardcoded.
 
+## The visual motif: the indicator rail
+
+The theme has one motif, drawn from two objects every FRC team handles
+constantly — extruded aluminium rail, and the indicator LEDs on a control
+board. It exists as three primitives in `abstracts/_mixins.scss`, and those
+mixins are the **only** way it should ever be drawn:
+
+| Primitive | Mixin | Where it appears |
+| --- | --- | --- |
+| **Rail** — a short squared bar at the leading edge, vertically inset so it reads machined rather than like a border | `rc-rail()` | Active sidebar link, active user-menu tab, accepted answer, code blocks (neutral), category rows (in the category's own colour) |
+| **Status light** — a small *square* state indicator | `rc-status-light()` | Unread/new markers, sidebar unread dots, GitHub language dots |
+| **Corner bracket** — an L-shaped 1px corner mark | `rc-bracket()` | The composer only |
+
+Plus one recurring gesture that is not a mixin: the **registration mark**, a
+4.5rem crimson segment sitting on an edge at the leading side. It appears
+exactly three times — under the header, under the first post of a topic, and
+on the composer's top edge when it opens.
+
+Two rules keep it from becoming noise:
+
+1. **Crimson marks state, never surface.** Links and primary buttons stay on
+   `--tertiary`. The accent appears on active navigation, pinned topics, the
+   three registration marks, and nothing else.
+2. **Squares, not circles.** Every state indicator is square with a 1px
+   corner break. A circle reads as a social notification dot; a square reads
+   as a component on a board. This is most of why the interface feels
+   technical rather than generic.
+
+Every motif element that carries meaning clears WCAG 1.4.11's 3:1 non-text
+contrast floor in **both** palettes — see the contrast note under
+*Light and dark*.
+
 ## Design principles
 
 1. **Information first.** Content dominates the interface. Topic rows share
@@ -92,8 +124,8 @@ stylesheets/
   base/                 _root, _core-variables, _typography, _accessibility
   layout/               _header, _sidebar, _main
   pages/                _topic-list, _categories, _topic, _profile
-  components/           _buttons, _forms, _tags, _badges, _menus, _modals,
-                        _composer, _search, _code, _community
+  components/           _buttons, _icons, _forms, _tags, _badges, _menus,
+                        _modals, _composer, _search, _code, _community
   utilities/            _responsive
 ```
 
@@ -143,7 +175,39 @@ Surface elevation flips direction between schemes — in light mode a raised
 surface is lighter than the page; in dark mode the page is the darkest
 layer — and `light-dark()` expresses both without forking the stylesheet.
 
-All foreground/background pairs in both palettes meet WCAG AA (≥4.5:1).
+All foreground/background pairs in both palettes meet WCAG AA (≥4.5:1), and
+every motif element that conveys state — the accent rail, the pinned rail,
+the solved rail, status lights, the neutral code rail — clears the 3:1
+non-text contrast floor in both palettes. `--rc-accent-muted` (75%) and
+`--rc-rail-neutral` (55%) are tuned to that floor specifically; lowering
+either will drop a state indicator below it.
+
+## Icons
+
+Discourse ships Font Awesome as an SVG sprite. This theme adds no icon
+library, no CDN and no emoji.
+
+Icon **appearance** is handled in `components/_icons.scss`: one size, one
+three-step opacity ramp (0.75 metadata / 0.9 at rest / 1.0 active), and one
+square container via `rc-icon-container()`. That consistency is where most of
+the icon identity comes from.
+
+Icon **choices** are changed only through supported APIs, and only where a
+clearer alternative genuinely exists. Currently that is one change:
+`create-topic-icon` → `plus` via `registerValueTransformer`.
+
+Two things are deliberately *not* done:
+
+- `replaceIcon()` is never called on a raw Font Awesome name (e.g.
+  `layer-group`). It is a global remap — it would silently retarget every
+  unrelated use of that glyph across core, plugins and the admin UI. Only
+  semantic aliases (`d-*`, `notification.*`, `topic.*`) are safe targets.
+- Sidebar link icons are left alone. They come from `defaultPrefixValue`
+  getters that administrators can already override per-section in site
+  settings; overriding them from the theme would take that control away.
+
+Any icon the theme's CSS depends on is declared in `about.json` under
+`modifiers.svg_icons` so it is guaranteed to be in the sprite subset.
 
 ## Compatibility philosophy
 

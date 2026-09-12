@@ -27,6 +27,31 @@
     @include rc-hairline;
     transition: background-color var(--rc-transition);
 
+    // The hover tick.
+    //
+    // Rather than relying on the background shift alone, hovering arms a
+    // short rail at the row's leading edge. It is the same gesture as the
+    // sidebar active rail, and it gives a dense list a sense of precision —
+    // you feel the row register under the cursor.
+    //
+    // Drawn on the first cell, because a <tr> cannot host a positioned
+    // pseudo-element reliably across browsers.
+    > td:first-child {
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: 15%;
+        inset-inline-start: 0;
+        width: var(--rc-rail-width-thin);
+        background: var(--rc-accent);
+        opacity: 0;
+        transition: opacity var(--rc-transition);
+        pointer-events: none;
+      }
+    }
+
     // Extremely subtle. Enough to confirm which row the cursor is on while
     // scanning; not enough to read as a selection.
     &:hover {
@@ -38,12 +63,25 @@
     &:focus-within {
       background: var(--rc-hover);
     }
+
+    &:hover > td:first-child::before,
+    &:focus-within > td:first-child::before {
+      opacity: 1;
+    }
   }
 
   // Core marks the last-viewed topic when returning from a topic. Keep it
   // obviously distinct from hover.
   .topic-list-item[data-is-last-viewed-topic] {
     background: var(--rc-selected);
+  }
+
+  // Pinned topics hold the rail permanently, in a muted crimson so they read
+  // as "kept" rather than as "active". This, plus core's thumbtack icon, is
+  // what distinguishes them without a background wash across the row.
+  .topic-list-item.pinned > td:first-child::before {
+    opacity: 1;
+    background: var(--rc-accent-muted);
   }
 }
 
@@ -122,6 +160,56 @@
 }
 
 // -------------------------------------------------------------------------
+// State indicators: the board LEDs
+// -------------------------------------------------------------------------
+//
+// Core renders these as small round badges. Squaring them to the motif's
+// status light ties the topic list to the sidebar, and reads as a state
+// readout rather than as social-media notification dots.
+//
+// Every one of these still sits alongside a second, non-colour cue (title
+// weight, an icon, or a number), so no state depends on colour alone.
+.topic-list {
+  // "New topic" marker — an empty span core renders as a dot.
+  .topic-post-badges .badge-notification.new-topic {
+    width: var(--rc-light-size);
+    height: var(--rc-light-size);
+    min-width: 0;
+    padding: 0;
+    border-radius: 1px;
+    background: var(--tertiary);
+  }
+
+  // Unread post count. Kept as a readable number — the count is information,
+  // not decoration — but squared to match.
+  .topic-post-badges .badge-notification.unread-posts {
+    border-radius: 2px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  // The newer unread indicator component used in nested/new views.
+  .topic-list-item .unread-indicator,
+  .topic-list-item .new-replies-dot {
+    border-radius: 1px;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Solved
+// -------------------------------------------------------------------------
+//
+// Rendered by discourse-solved when installed; these selectors simply never
+// match without it. A solved thread is the single most valuable row in a
+// technical archive, so it earns a genuine marker — a green status light in
+// the status cluster, matching the LED language.
+.topic-list .topic-statuses .d-icon-check,
+.topic-list .topic-statuses .d-icon-far-square-check,
+.topic-list-item .status-solved {
+  color: var(--success);
+}
+
+// -------------------------------------------------------------------------
 // Bottom line: category, tags, participant groups
 // -------------------------------------------------------------------------
 .topic-list .link-bottom-line {
@@ -174,8 +262,24 @@
   .views,
   .likes {
     font-variant-numeric: tabular-nums;
+
+    // Lining figures at a slightly tighter tracking make a vertical column
+    // of counts easier to compare at a glance.
+    letter-spacing: -0.01em;
     text-align: center;
     white-space: nowrap;
+  }
+
+  // Replies is the count people actually scan for, so it is the only stat
+  // that carries full text colour. Views and likes recede a step. This is
+  // the hierarchy that was missing: previously all three looked equal.
+  .posts .badge-posts {
+    color: var(--rc-text-secondary);
+  }
+
+  .views,
+  .likes {
+    color: var(--rc-text-muted);
   }
 
   .num.activity {
@@ -183,6 +287,12 @@
 
     .age {
       color: var(--rc-text-muted);
+    }
+
+    // The activity column is the row's timestamp. Hovering it should feel
+    // like a link, because it is one.
+    a:hover {
+      color: var(--rc-text);
     }
   }
 

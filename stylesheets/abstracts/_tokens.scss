@@ -79,6 +79,50 @@
   --rc-accent: var(--quaternary);
   --rc-accent-soft: color-mix(in srgb, var(--quaternary) 12%, transparent);
 
+  // A dimmed accent for persistent-but-secondary markers (the pinned rail).
+  // Held at 75% rather than something softer because it is a state
+  // indicator: measured against the page it clears WCAG 1.4.11's 3:1
+  // non-text contrast floor in both palettes (3.44 dark / 3.91 light).
+  --rc-accent-muted: color-mix(in srgb, var(--quaternary) 75%, transparent);
+
+  // -- Motif: the indicator rail -----------------------------------------
+  //
+  // The theme's visual signature, drawn from two objects every FRC team
+  // handles constantly: extruded aluminium rail, and the indicator LEDs on a
+  // control board.
+  //
+  // Three primitives, implemented as mixins in abstracts/_mixins.scss:
+  //
+  //   rail          a short squared bar at the LEADING edge of anything
+  //                 active or primary. Vertically inset, never full-bleed,
+  //                 so it reads machined rather than like a border.
+  //   status light  a small SQUARE state indicator. Squares read as board
+  //                 LEDs; circles read as social notification dots.
+  //   bracket       an L-shaped corner mark, reserved for genuinely
+  //                 technical surfaces (code blocks, composer).
+  //
+  // These are applied in a deliberately small number of places — header,
+  // active navigation, important topic states, composer, code — and nowhere
+  // else. The restraint is what keeps the motif legible.
+
+  --rc-rail-width: 3px;
+  --rc-rail-width-thin: 2px;
+
+  // How far the rail is inset from the top and bottom of its host. This is
+  // the detail that makes it read as a machined part rather than a border.
+  --rc-rail-inset: 22%;
+  --rc-light-size: 6px;
+  --rc-bracket-size: 6px;
+
+  // Neutral rail / bracket colour.
+  //
+  // Deliberately stronger than --rc-border-strong. A rail is a mark, not a
+  // border: at border weight it disappears against the recessed surfaces it
+  // sits on (--rc-border-strong measured only 1.91:1 against the code-block
+  // background in light mode). 55% clears 3:1 in both palettes.
+  --rc-rail-neutral: color-mix(in srgb, var(--primary) 55%, transparent);
+  --rc-bracket-color: var(--rc-rail-neutral);
+
   // -- Shape -------------------------------------------------------------
   //
   // Driven by the `interface_corner_radius` setting. Small chips clamp at

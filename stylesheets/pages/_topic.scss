@@ -48,9 +48,33 @@
 }
 
 // The first post carries the question or the build premise, so it gets a
-// slightly stronger closing rule to mark the transition into replies.
+// stronger closing rule plus a short crimson index mark — the same
+// registration gesture as the header. In a 300-post build thread this is
+// what tells you at a glance that you are back at the top.
 #post_1 article.boxed {
-  border-block-end-color: var(--rc-border);
+  position: relative;
+  border-block-end: 1px solid var(--rc-border);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline-start: 0;
+    width: 3rem;
+    height: 1px;
+    background: var(--rc-accent);
+    pointer-events: none;
+  }
+}
+
+// Accepted answer.
+//
+// Rendered by discourse-solved; the selectors never match without it. A
+// solved post is the most valuable thing in a technical thread, so it gets
+// the rail in success green — the only place green is used structurally.
+.topic-post.accepted-answer article.boxed,
+.topic-post .accepted-answer {
+  @include rc-rail(var(--success), var(--rc-rail-width));
 }
 
 // -------------------------------------------------------------------------
@@ -109,9 +133,17 @@
     }
   }
 
-  // Post number. Useful for citing ("see #47") and should stay findable.
+  // Post number.
+  //
+  // In a long build thread people cite posts constantly ("47'de yazdığım
+  // gibi"), so the number is treated as a real reference: monospaced digits
+  // in a quiet chip, aligned with the technical character of the theme
+  // rather than hidden as incidental metadata.
   .post-info.post-date .post-number {
+    color: var(--rc-text-faint);
     font-variant-numeric: tabular-nums;
+    font-size: var(--font-down-2);
+    letter-spacing: 0.02em;
   }
 }
 
@@ -139,8 +171,30 @@
     margin-block: var(--rc-space-4);
   }
 
-  .lightbox-wrapper img {
+  // Keeping image-heavy threads calm.
+  //
+  // A build log post can contain a dozen full-width robot photos. Without a
+  // ceiling, each one fills the viewport and scrolling the thread becomes a
+  // slideshow. Capping height (not width) keeps the composition intact,
+  // preserves the aspect ratio, and leaves the lightbox as the way to see
+  // the full image — which is what the lightbox is for.
+  .lightbox-wrapper img,
+  > img,
+  p > img {
     border-radius: var(--rc-radius-sm);
+    max-height: 34rem;
+    width: auto;
+    object-fit: contain;
+  }
+
+  // A hairline around photographs stops light-coloured CAD screenshots from
+  // bleeding into the page background in light mode.
+  .lightbox-wrapper {
+    border: 1px solid var(--rc-border-subtle);
+    border-radius: var(--rc-radius-sm);
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   // Core's lightbox caption bar.
@@ -161,13 +215,22 @@
   border-radius: 0 var(--rc-radius-sm) var(--rc-radius-sm) 0;
   margin-block: var(--rc-space-4);
 
+  // The citation bar reads as a label plate: a quiet strip above the quoted
+  // text, separated by a hairline, with the attribution in small caps-ish
+  // tracking. It makes a nested chain of quotes parseable at a glance.
   .title {
     border-block-end: 1px solid var(--rc-border-subtle);
     color: var(--rc-text-muted);
-    font-size: var(--font-down-1);
+    font-size: var(--font-down-2);
+    letter-spacing: 0.01em;
 
     .avatar {
-      border-radius: 50%;
+      border-radius: 2px;
+    }
+
+    // Core's expand/collapse control for the quoted post.
+    .quote-controls {
+      color: var(--rc-text-faint);
     }
   }
 

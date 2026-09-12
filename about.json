@@ -2,15 +2,22 @@
   "name": "Ro6one Community",
   "component": false,
   "authors": "Ro6one Robotics",
-  "about_url": "https://github.com/ro6one/forum-theme",
-  "license_url": "https://github.com/ro6one/forum-theme/blob/main/LICENSE",
-  "theme_version": "1.0.0",
+  "about_url": "https://github.com/Leyoo-shi/frc-tr-forum-theme",
+  "license_url": "https://github.com/Leyoo-shi/frc-tr-forum-theme/blob/main/LICENSE",
+  "theme_version": "1.1.0",
   "assets": {},
   "modifiers": {
     "serialize_topic_excerpts": {
       "type": "setting",
       "value": "show_topic_excerpts"
-    }
+    },
+    "svg_icons": [
+      "plus",
+      "thumbtack",
+      "lock",
+      "circle-check",
+      "far-square-check"
+    ]
   },
   "color_schemes": {
     "Ro6one Community": {

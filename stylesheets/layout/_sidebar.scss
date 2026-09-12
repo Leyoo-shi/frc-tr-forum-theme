@@ -20,12 +20,43 @@
 //
 // Quiet, uppercase, small. They label the groups without competing with the
 // links inside them.
+//
+// The section title is paired with a hairline that runs to the end of the
+// row — a plate label with a scribe line, rather than a bare heading. It is
+// what gives the sidebar structure when several sections are open at once.
 .sidebar-section-header {
   color: var(--rc-text-muted);
   font-size: var(--font-down-2);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.sidebar-section-header-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--rc-space-2);
+
+  // The scribe line. `flex: 1` makes it consume whatever width is left, so
+  // it adapts to any section title length in any language.
+  &::after {
+    content: "";
+    order: 1;
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--rc-border-subtle);
+  }
+
+  // The title stays first; every trailing control core may render — caret,
+  // per-section dropdown, action button, global indicator — is pushed past
+  // the line. Listed explicitly rather than using `* { order: 2 }` so a
+  // future core addition fails visible rather than silently reordering.
+  .sidebar-section-header-caret,
+  .sidebar-section-header-dropdown,
+  .sidebar-section-header-button,
+  .sidebar-section-header-global-indicator {
+    order: 2;
+  }
 }
 
 // -------------------------------------------------------------------------
@@ -43,10 +74,18 @@
     color: var(--rc-text);
   }
 
-  // Active state reads through three cues at once — weight, colour and a
-  // filled surface — so it never depends on colour alone.
+  // Active state: the indicator rail.
+  //
+  // This replaces the filled "selected" block, which was the most generic
+  // thing in the old theme — every Discourse install looks like that. The
+  // rail is the theme's signature and it still carries three independent
+  // cues (rail, weight, colour), so the state never depends on colour alone.
+  //
+  // The surface behind it is deliberately much fainter than --rc-selected:
+  // the rail is doing the work, so the fill only needs to hint.
   &.active {
-    background: var(--rc-selected);
+    @include rc-rail;
+    background: var(--rc-accent-soft);
     color: var(--rc-text);
     font-weight: 600;
   }
@@ -54,6 +93,13 @@
   &:focus-visible {
     @include rc-focus-ring(-2px);
   }
+}
+
+// The rail needs to sit flush with the row's leading edge, inside the
+// rounded corner. Clipping the row keeps the squared rail from poking out.
+.sidebar-section-link-wrapper {
+  overflow: hidden;
+  border-radius: var(--rc-radius-sm);
 }
 
 // Long category and tag names must truncate rather than wrap the sidebar
@@ -76,18 +122,65 @@
 // Core renders a category's configured colour here. That colour is genuine
 // information — it is how regulars recognise a category at a glance — so the
 // theme leaves it alone and only ensures it stays visible.
+//
+// Everything here is about making a mixed column of icons, colour squares
+// and images share one optical footprint. Without this the sidebar reads as
+// a ragged list; with it, it reads as a legend.
 .sidebar-section-link-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+
   &.icon,
   &.span {
     opacity: 1;
   }
+
+  // Icons are held at one size and one weight so Font Awesome's varying
+  // glyph density does not make some rows look bolder than others.
+  .prefix-icon {
+    font-size: var(--font-down-1);
+    opacity: 0.75;
+  }
+
+  // Category colour squares. Squared to match the status-light motif —
+  // core's default is a rounded pill, which reads as decoration.
+  .prefix-square {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 1px;
+  }
+}
+
+// The active row's icon comes fully forward, reinforcing the rail.
+.sidebar-section-link.active .sidebar-section-link-prefix .prefix-icon {
+  opacity: 1;
+  color: var(--rc-accent);
 }
 
 // -------------------------------------------------------------------------
 // Unread / new indicators
 // -------------------------------------------------------------------------
+//
+// Core renders an unread marker as a circle icon. Squaring it to the board
+// LED is a one-line change that ties the sidebar to the topic list, where
+// the same indicator appears against unread rows.
 .sidebar-section-link-suffix.icon.unread {
   color: var(--tertiary);
+
+  .d-icon {
+    // Hide the glyph itself and draw the square in its place, so the
+    // indicator matches the motif without replacing core's markup.
+    width: var(--rc-light-size);
+    height: var(--rc-light-size);
+    background: currentcolor;
+    border-radius: 1px;
+
+    path {
+      display: none;
+    }
+  }
 }
 
 // -------------------------------------------------------------------------

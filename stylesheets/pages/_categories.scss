@@ -40,12 +40,28 @@
   }
 }
 
+// The category colour marker.
+//
+// Core already draws this: it sets `--category-badge-color` inline on the
+// `td.category` cell and renders a 6px left border from it. Rather than
+// adding a second marker beside the title — which would double-draw the same
+// information — the existing border is retuned to the motif's rail width.
+//
+// One marker per category, at the same width as every other rail in the
+// theme. No category names are referenced; the colour is whatever the
+// community configured.
+.category-list tbody td.category {
+  border-inline-start: var(--rc-rail-width) solid
+    var(--category-badge-color, var(--rc-border-strong));
+}
+
 // The category title. This is the row's anchor, so it gets the most weight.
 .category-title-link {
   .category-name {
     color: var(--rc-text);
     font-size: var(--font-up-1);
-    font-weight: 600;
+    font-weight: 650;
+    letter-spacing: -0.01em;
     line-height: 1.3;
   }
 
@@ -118,10 +134,24 @@
   white-space: nowrap;
 }
 
-.category-topics-count {
-  .value {
+// The count is the row's one hard number, so it gets full contrast and
+// weight while its unit label stays quiet. Reading "142 konu" as
+// bold-then-muted is faster than reading it as one uniform grey phrase.
+.category-topics-count,
+.category-list .topics {
+  .value,
+  .number {
     color: var(--rc-text);
-    font-weight: 600;
+    font-size: var(--font-up-1);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .unit {
+    color: var(--rc-text-faint);
+    font-size: var(--font-down-2);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 }
 

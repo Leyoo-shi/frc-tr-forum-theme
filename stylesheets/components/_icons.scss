@@ -1,0 +1,108 @@
+// =========================================================================
+// Icon system
+// =========================================================================
+//
+// Icons are treated as part of the theme's identity rather than as
+// incidental glyphs. Discourse ships Font Awesome as an SVG sprite; this
+// theme adds no icon library, no CDN, and no emoji. Icon *choices* are
+// changed through supported theme APIs in
+// javascripts/discourse/api-initializers/ro6one-community.gjs; this file
+// handles their appearance.
+//
+// The problem being solved: Font Awesome glyphs vary considerably in optical
+// weight and bounding-box fill. Left alone, a row of mixed icons reads as
+// accidental. Holding them to one size, one opacity ramp and one container
+// shape is what makes the interface feel designed rather than assembled.
+
+// -------------------------------------------------------------------------
+// Baseline
+// -------------------------------------------------------------------------
+.d-icon {
+  // Icons sit beside text far more often than not, so aligning to the text
+  // box rather than the baseline keeps them optically centred at any size.
+  vertical-align: middle;
+}
+
+// -------------------------------------------------------------------------
+// Opacity ramp
+// -------------------------------------------------------------------------
+//
+// Three steps, used consistently:
+//
+//   0.6   decorative / metadata icons that support adjacent text
+//   0.9   interactive icons at rest
+//   1.0   hovered, focused or active
+//
+// Expressed as opacity rather than as separate colours so icons inherit
+// whatever colour their context sets, including category colours and
+// semantic states.
+.topic-list .topic-statuses .d-icon,
+.topic-map .d-icon,
+.post-info .d-icon,
+.category-list .d-icon {
+  opacity: 0.75;
+}
+
+// -------------------------------------------------------------------------
+// Interactive icon buttons
+// -------------------------------------------------------------------------
+//
+// Any icon-only button gets the same square container, so post controls,
+// header icons, toolbar buttons and menu triggers share one footprint.
+.btn.no-text,
+.btn-icon,
+.btn-flat.no-text {
+  .d-icon {
+    opacity: 0.9;
+    transition: opacity var(--rc-transition);
+  }
+
+  &:hover .d-icon,
+  &:focus-visible .d-icon {
+    opacity: 1;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Semantic state colours
+// -------------------------------------------------------------------------
+//
+// A small number of icons carry meaning through colour. Each is paired with
+// a shape or text cue elsewhere, so colour is never the only signal.
+.d-icon-lock,
+.d-icon-far-eye-slash {
+  // Closed / hidden. Neutral: these are states, not warnings.
+  color: var(--rc-text-muted);
+}
+
+.d-icon-thumbtack {
+  // Pinned. Matches the pinned rail in the topic list.
+  color: var(--rc-accent);
+}
+
+.d-icon-circle-check,
+.d-icon-far-square-check {
+  color: var(--success);
+}
+
+// -------------------------------------------------------------------------
+// Category and tag icons
+// -------------------------------------------------------------------------
+//
+// Administrators can assign an icon to a category. When they do, it should
+// read at the same weight as the colour marker beside it — neither should
+// dominate.
+.badge-category .d-icon,
+.category-title-link .d-icon {
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+
+// -------------------------------------------------------------------------
+// Reduced motion
+// -------------------------------------------------------------------------
+//
+// The opacity transitions above are built on --rc-transition, which
+// base/_accessibility.scss zeroes under prefers-reduced-motion. No extra
+// handling is needed here; this note exists so the next person does not add
+// a hardcoded duration.

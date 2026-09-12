@@ -13,6 +13,40 @@
   // from content without visually floating above it.
   border-block-end: 1px solid var(--rc-border-subtle);
   box-shadow: none;
+
+  // The registration mark.
+  //
+  // A short crimson segment sitting ON the header's bottom hairline, at the
+  // leading edge. It reads like the index mark machined into the end of a
+  // rail — the single most recognisable thing about the theme, and it costs
+  // one pseudo-element and no layout.
+  //
+  // Deliberately NOT a full-width crimson border: a coloured line across the
+  // whole viewport would make the interface feel branded rather than built.
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline-start: 0;
+    width: 4.5rem;
+    height: 2px;
+    background: var(--rc-accent);
+    pointer-events: none;
+  }
+}
+
+// On wide viewports the mark aligns with the content column rather than the
+// raw viewport edge, so it sits under the logo instead of floating in the
+// gutter.
+@include rc-from(lg) {
+  .d-header::after {
+    inset-inline-start: max(
+      0px,
+      calc((100vw - var(--rc-content-width)) / 2 + var(--d-wrap-padding-x))
+    );
+  }
 }
 
 // Optional translucency, behind the `header_translucency` setting.
@@ -56,35 +90,115 @@
   }
 }
 
-// Text fallback when no logo image is configured.
+// Text fallback when no logo image is configured. Tighter tracking and a
+// heavier weight make the wordmark read as a mark rather than as running
+// text, which matters when there is no logo image at all.
 .d-header .home-logo .site-title {
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--header_primary);
+}
+
+// -------------------------------------------------------------------------
+// Header hierarchy
+// -------------------------------------------------------------------------
+//
+// Three groups, decreasing in weight: identity (logo) → search → account
+// actions. A hairline divider separates the account cluster from the rest so
+// the eye can find it without it needing extra colour or size.
+.d-header .panel {
+  gap: var(--rc-space-2);
+}
+
+.d-header-icons {
+  gap: 0.125rem;
+
+  // Divider before the account cluster. Drawn on the list rather than on an
+  // individual icon so it survives icons being added or removed by plugins
+  // (chat, bookmarks, admin).
+  .header-dropdown-toggle.current-user {
+    position: relative;
+    margin-inline-start: var(--rc-space-2);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: 25%;
+      inset-inline-start: calc(var(--rc-space-1) * -1);
+      width: 1px;
+      background: color-mix(in srgb, var(--header_primary) 15%, transparent);
+    }
+  }
 }
 
 // -------------------------------------------------------------------------
 // Header icons
 // -------------------------------------------------------------------------
+//
+// Every header control gets the same square optical footprint via
+// rc-icon-container(), so the row reads as a set of instruments rather than
+// as assorted glyphs.
 .d-header-icons {
   .icon,
   .btn {
+    @include rc-icon-container(2rem);
     color: var(--header_primary);
-    border-radius: var(--rc-radius-sm);
-    transition: background-color var(--rc-transition);
+    transition:
+      background-color var(--rc-transition),
+      color var(--rc-transition);
+
+    .d-icon {
+      // Optical weight normalisation. Font Awesome glyphs vary noticeably in
+      // apparent density; holding them at one size and one opacity is what
+      // makes a mixed row look intentional.
+      font-size: var(--font-0);
+      opacity: 0.9;
+    }
 
     &:hover,
     &:focus-visible {
       background: color-mix(in srgb, var(--header_primary) 8%, transparent);
       color: var(--header_primary);
+
+      .d-icon {
+        opacity: 1;
+      }
+    }
+
+    // `aria-expanded` lives on the button itself; core puts `.active` on the
+    // wrapping <li>, which is handled separately below.
+    &[aria-expanded="true"] {
+      background: color-mix(in srgb, var(--header_primary) 10%, transparent);
+
+      .d-icon {
+        opacity: 1;
+      }
+    }
+  }
+
+  // Open panel. The class is on the <li class="header-dropdown-toggle">,
+  // not on the button, so it has to be addressed from the wrapper.
+  .header-dropdown-toggle.active .icon {
+    background: color-mix(in srgb, var(--header_primary) 10%, transparent);
+
+    .d-icon {
+      opacity: 1;
     }
   }
 
   // Notification / message counts. These must remain obvious — they are the
-  // one place in the header where saturated colour is justified.
+  // one place in the header where saturated colour is justified. Squared to
+  // match the status-light motif rather than reading as a social-app pill.
   .badge-notification {
     font-variant-numeric: tabular-nums;
     font-weight: 600;
+    border-radius: 2px;
+  }
+
+  // Unread indicators that carry no number render as the board LED.
+  .badge-notification.with-icon,
+  .unread-notifications {
+    border-radius: 2px;
   }
 }
 

@@ -115,6 +115,125 @@
 }
 
 // -------------------------------------------------------------------------
+// Motif: the indicator rail
+// -------------------------------------------------------------------------
+//
+// The theme's visual signature. See the "Motif" block in _tokens.scss for
+// the rationale. These three mixins are the ONLY way the motif should be
+// drawn — if a new surface needs it, call one of these rather than
+// hand-rolling a pseudo-element, so the motif stays consistent and can be
+// retuned from one place.
+//
+// All three use ::before or ::after. Hosts must therefore establish a
+// positioning context; each mixin sets `position: relative` unless the host
+// already has one, which is why they are written to be safe to apply to
+// table cells, list items and links alike.
+
+/// A short, squared bar at the leading edge of an active or primary element.
+///
+/// Vertically inset by --rc-rail-inset so it never touches the element's
+/// top or bottom edge — that inset is what distinguishes it from an ordinary
+/// left border and gives it the machined quality the motif depends on.
+///
+/// @param $color  bar colour; defaults to the crimson accent
+/// @param $width  bar thickness
+/// @param $side   which edge to attach to (inline-start or inline-end)
+@mixin rc-rail(
+  $color: var(--rc-accent),
+  $width: var(--rc-rail-width),
+  $side: inline-start
+) {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: var(--rc-rail-inset);
+    inset-#{$side}: 0;
+    width: $width;
+    background: $color;
+    border-radius: 0;
+    pointer-events: none;
+  }
+}
+
+/// A small square state indicator — the "board LED".
+///
+/// Used for unread, new and solved states. Deliberately square: a circle
+/// here would read as a social notification dot, which is the opposite of
+/// the intended character.
+///
+/// Applied as ::after so it can coexist with rc-rail() on the same element.
+@mixin rc-status-light($color: var(--tertiary), $size: var(--rc-light-size)) {
+  &::after {
+    content: "";
+    display: inline-block;
+    width: $size;
+    height: $size;
+    flex: 0 0 auto;
+    background: $color;
+
+    // 1px, not 50%. Square with the corner barely broken reads as a
+    // component on a board rather than as a dot.
+    border-radius: 1px;
+  }
+}
+
+/// An L-shaped corner bracket.
+///
+/// Reserved for surfaces that are genuinely technical artefacts — code
+/// blocks and the composer. Drawn with two borders on a zero-size
+/// pseudo-element, so it costs one element and no extra paint area.
+///
+/// @param $corner  one of: top-start, top-end, bottom-start, bottom-end
+@mixin rc-bracket($corner: top-start, $color: var(--rc-bracket-color)) {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: var(--rc-bracket-size);
+    height: var(--rc-bracket-size);
+    pointer-events: none;
+
+    @if $corner == top-start {
+      inset-block-start: -1px;
+      inset-inline-start: -1px;
+      border-block-start: 1px solid $color;
+      border-inline-start: 1px solid $color;
+    } @else if $corner == top-end {
+      inset-block-start: -1px;
+      inset-inline-end: -1px;
+      border-block-start: 1px solid $color;
+      border-inline-end: 1px solid $color;
+    } @else if $corner == bottom-start {
+      inset-block-end: -1px;
+      inset-inline-start: -1px;
+      border-block-end: 1px solid $color;
+      border-inline-start: 1px solid $color;
+    } @else {
+      inset-block-end: -1px;
+      inset-inline-end: -1px;
+      border-block-end: 1px solid $color;
+      border-inline-end: 1px solid $color;
+    }
+  }
+}
+
+/// A compact, square-ish container for an icon.
+///
+/// Gives header and menu icons a consistent optical footprint so they line
+/// up as a system rather than as a row of differently-shaped glyphs.
+@mixin rc-icon-container($size: 1.75rem) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $size;
+  min-height: $size;
+  border-radius: var(--rc-radius-sm);
+}
+
+// -------------------------------------------------------------------------
 // Touch targets
 // -------------------------------------------------------------------------
 

@@ -10,11 +10,27 @@
   background: var(--rc-surface-raised);
   border-block-start: 1px solid var(--rc-border);
   box-shadow: var(--shadow-composer);
+  position: relative;
 
-  // The composer's top edge is the boundary between reading and writing.
-  // A crimson hairline is a quiet way to make the mode switch obvious.
-  &.open {
-    border-block-start-color: var(--rc-accent);
+  // The composer's signature.
+  //
+  // The top edge is the boundary between reading and writing, so it carries
+  // the same registration mark as the header: a short crimson segment at the
+  // leading edge rather than a crimson line across the whole viewport.
+  // Opening the composer visibly "arms" the surface.
+  //
+  // Previously this coloured the entire top border, which was the single
+  // largest concentration of crimson in the interface.
+  &.open::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -1px;
+    inset-inline-start: 0;
+    width: 4.5rem;
+    height: 2px;
+    background: var(--rc-accent);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .grippie {
@@ -23,6 +39,15 @@
     &::before {
       background: var(--rc-border-strong);
     }
+  }
+}
+
+// On wide viewports the mark aligns to the composer's content column, so it
+// sits under the title field rather than in the gutter — matching how the
+// header mark aligns under the logo.
+@include rc-from(lg) {
+  #reply-control.open::before {
+    inset-inline-start: max(0px, calc((100% - var(--rc-content-width)) / 2));
   }
 }
 
@@ -58,8 +83,21 @@
   border-radius: var(--rc-radius-sm);
   transition: border-color var(--rc-transition);
 
+  // Corner brackets.
+  //
+  // The composer is the one surface in the theme that gets the bracket
+  // primitive: it has no overflow context to clip the pseudo-element, and it
+  // is where the "instrument panel" character is most appropriate. One
+  // bracket, at the far corner from the toolbar, so it registers as a
+  // machined detail rather than a frame.
+  @include rc-bracket(bottom-end, var(--rc-rail-neutral));
+
   &:focus-within {
     border-color: var(--tertiary);
+
+    &::after {
+      border-color: var(--tertiary);
+    }
   }
 }
 
@@ -87,17 +125,56 @@
 // -------------------------------------------------------------------------
 // Toolbar
 // -------------------------------------------------------------------------
+//
+// Core already emits `<div class="toolbar-separator">` between logical
+// button groups (formatting / structure / insert), driven by the toolbar's
+// own group definitions. Giving that separator a real appearance turns the
+// toolbar from an undifferentiated row of glyphs into legible clusters —
+// the biggest usability gain available here, with no markup changes.
 .d-editor-button-bar {
   border-block-end: 1px solid var(--rc-border-subtle);
+  align-items: center;
+  gap: 0.125rem;
 
-  .btn {
+  .btn,
+  .toolbar__button {
+    @include rc-icon-container(1.75rem);
     color: var(--rc-text-muted);
+
+    .d-icon {
+      font-size: var(--font-down-1);
+      opacity: 0.9;
+    }
 
     &:hover,
     &:focus-visible {
       background: var(--rc-hover);
       color: var(--rc-text);
+
+      .d-icon {
+        opacity: 1;
+      }
     }
+  }
+
+  // Active formatting state (bold on, inside a list, ...). Core marks this
+  // with its own `--active` modifier on the button.
+  .toolbar__button.--active {
+    background: var(--rc-selected);
+    color: var(--rc-text);
+
+    .d-icon {
+      opacity: 1;
+    }
+  }
+
+  // Group separators — the toolbar's cluster boundaries.
+  .toolbar-separator {
+    width: 1px;
+    height: 1.25rem;
+    margin-inline: var(--rc-space-2);
+    background: var(--rc-border-subtle);
+    flex: 0 0 auto;
   }
 }
 
@@ -111,9 +188,41 @@
   background: var(--rc-surface-sunken);
   border-radius: var(--rc-radius-sm);
 
+  // A hairline divider between writing and preview, so the split reads as
+  // two panes of one instrument rather than two floating boxes.
+  border-inline-start: 1px solid var(--rc-border-subtle);
+
   // Marker that this is a preview rather than the live post.
   &::before {
     color: var(--rc-text-faint);
+    font-size: var(--font-down-2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Fullscreen
+// -------------------------------------------------------------------------
+//
+// Used for writing long build logs. In fullscreen the surrounding chrome is
+// gone, so the text column gets the same reading measure as a rendered post
+// — writing and reading at the same line length.
+#reply-control.fullscreen {
+  .d-editor-input,
+  .d-editor-preview {
+    max-width: var(--rc-reading-width);
+    margin-inline: auto;
+  }
+
+  // Without page chrome the bracket has nothing to register against, and the
+  // border would frame the whole viewport. Both are dropped.
+  .d-editor-textarea-wrapper {
+    border-color: transparent;
+
+    &::after {
+      display: none;
+    }
   }
 }
 
@@ -129,10 +238,15 @@
 }
 
 // Drag-and-drop target for schematics, CAD screenshots and log files.
+//
+// The composer is where robot photos and log files enter the forum, so the
+// drop state is made unmistakable: a dashed boundary plus a tinted surface,
+// rather than a thin outline that is easy to miss mid-drag.
 #reply-control.composer-drag-drop-target,
 .composer-drag-drop-target {
   outline: 2px dashed var(--tertiary);
   outline-offset: -4px;
+  background: color-mix(in srgb, var(--tertiary) 8%, var(--rc-surface-raised));
 }
 
 .upload-progress-bar,

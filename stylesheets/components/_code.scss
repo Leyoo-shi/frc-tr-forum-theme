@@ -44,6 +44,16 @@ a > code {
   margin-block: var(--rc-space-4);
   padding: var(--rc-space-3) var(--rc-space-4);
 
+  // The technical marker: a neutral rail down the leading edge.
+  //
+  // Neutral, not crimson — code appears constantly in this community, and a
+  // red edge on every block would be exhausting.
+  //
+  // A corner bracket is deliberately NOT used here: `overflow-x: auto`
+  // below would clip an absolutely positioned pseudo-element. Brackets are
+  // reserved for the composer, which has no overflow context.
+  border-inline-start: var(--rc-rail-width-thin) solid var(--rc-rail-neutral);
+
   // Code scrolls horizontally inside its own box. It must never wrap —
   // wrapped code is misleading — and must never widen the post.
   max-width: 100%;
@@ -190,6 +200,83 @@ a > code {
   .github-content,
   .onebox-body pre {
     font-size: var(--font-down-1);
+  }
+}
+
+// -------------------------------------------------------------------------
+// GitHub oneboxes
+// -------------------------------------------------------------------------
+//
+// Repository, file, commit and pull-request links are posted constantly in a
+// robotics community — vendordeps, WPILib examples, team repos. Core gives
+// them their own markup, so they can be tuned as a first-class citation
+// rather than as a generic link preview.
+.cooked .onebox.githubrepo,
+.cooked .onebox.githubblob,
+.cooked .onebox.githubcommit,
+.cooked .onebox.githubpullrequest,
+.cooked .onebox.githubissue {
+  .github-row {
+    align-items: flex-start;
+    gap: var(--rc-space-3);
+  }
+
+  // The repo/file name is the thing being cited, so it leads.
+  .github-info-container .name,
+  .onebox-title {
+    font-weight: 600;
+
+    a {
+      color: var(--rc-text);
+
+      &:hover {
+        color: var(--d-link-color);
+      }
+    }
+  }
+
+  .github-info-container .description,
+  .github-info-container .lines {
+    color: var(--rc-text-muted);
+    font-size: var(--font-down-1);
+  }
+
+  // Stars / forks / line counts read as instrument values.
+  .github-info-container .branches,
+  .github-info-container .stars,
+  .github-info-container .forks,
+  .github-info-container .lines {
+    font-variant-numeric: tabular-nums;
+  }
+
+  // The language colour dot core renders. Squared to the status-light motif.
+  .github-info-container .lang-color,
+  .repo-info .lang-color {
+    border-radius: 1px;
+  }
+}
+
+// -------------------------------------------------------------------------
+// Video oneboxes
+// -------------------------------------------------------------------------
+//
+// Match reveal videos, robot run footage and mechanism tests. The embed
+// keeps a stable 16:9 box so a thread full of videos does not jump around
+// while thumbnails load.
+.cooked .onebox.video-onebox,
+.cooked .video-container,
+.cooked .lazy-video-container {
+  border-radius: var(--rc-radius-sm);
+  overflow: hidden;
+  max-width: 100%;
+
+  iframe,
+  video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
   }
 }
 

@@ -42,12 +42,34 @@
 // -------------------------------------------------------------------------
 .user-menu {
   .tabs-list .btn {
-    border-radius: var(--rc-radius-sm);
+    @include rc-icon-container(2rem);
     color: var(--rc-text-muted);
+    position: relative;
 
+    .d-icon {
+      opacity: 0.9;
+    }
+
+    // Active tab carries the rail, consistent with the sidebar. The tab
+    // column runs vertically, so the rail sits on its leading edge exactly
+    // as it does on a sidebar row.
     &.active {
-      background: var(--rc-selected);
+      background: var(--rc-accent-soft);
       color: var(--rc-text);
+
+      .d-icon {
+        opacity: 1;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: var(--rc-rail-inset);
+        inset-inline-start: 0;
+        width: var(--rc-rail-width);
+        background: var(--rc-accent);
+        pointer-events: none;
+      }
     }
 
     &:focus-visible {
@@ -131,10 +153,30 @@
 
   > li > a {
     white-space: nowrap;
+    font-weight: 500;
 
     &:focus-visible {
       @include rc-focus-ring(-2px);
     }
+
+    // Active tab: the rail, rotated horizontal.
+    //
+    // Core draws the active marker from --d-nav-border-color--active (set to
+    // the crimson in base/_core-variables.scss). This squares the ends and
+    // shortens it slightly so it reads as a machined index mark rather than
+    // as a full-width underline — the same language as the header
+    // registration mark and the sidebar active rail.
+    &.active {
+      font-weight: 650;
+      border-radius: 0;
+    }
+  }
+
+  // Latest / New / Unread / Top carry counts. Tabular figures stop the row
+  // from reflowing as counts tick up while reading.
+  .badge-notification {
+    font-variant-numeric: tabular-nums;
+    border-radius: 2px;
   }
 }
 
